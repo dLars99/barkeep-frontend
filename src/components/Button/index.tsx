@@ -2,8 +2,7 @@ import React, { ButtonHTMLAttributes } from "react";
 import { To, useNavigate } from "react-router-dom";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  //   backgroundImage: ImageSourcePropType;  TO DO - find type
-  //   width: string | number;
+  //   backgroundImage?: ImageSourcePropType;  TO DO - find type
   linkUrl?: To;
   className?: string;
   onClick?: () => void;
