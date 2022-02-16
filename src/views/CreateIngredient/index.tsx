@@ -9,29 +9,42 @@ import Button from "../../components/Button";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = createUseStyles({
+  header: {
+    display: "flex",
+    marginTop: 30,
+  },
   backButton: {
     background: "transparent",
     border: "none",
+    width: 80,
+  },
+  title: {
+    position: "relative",
+    left: -20,
+    width: "100%",
+    textAlign: "center",
   },
   formRoot: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    width: "60%",
+    margin: [0, "auto"],
   },
   fieldLabel: {
     fontSize: "1.3rem",
-    margin: 0,
-    // alignSelf: "start",
+    margin: [0, 0, 5],
+    alignSelf: "start",
   },
   formField: {
-    width: "60%",
+    width: "100%",
     margin: [5, 0, 25],
   },
 });
 
-const CreateIngredient = () => {
-  const navigate = useNavigate();
+const CreateIngredient = (): JSX.Element => {
   const classes = useStyles();
+  const navigate = useNavigate();
   const [typeList, setTypeList] = useState<IngredientType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -53,10 +66,12 @@ const CreateIngredient = () => {
 
   return (
     <div>
-      <button className={classes.backButton} onClick={() => navigate(-1)}>
-        {"<< Back"}
-      </button>
-      <h1>Add a New Ingredient</h1>
+      <header className={classes.header}>
+        <button className={classes.backButton} onClick={() => navigate(-1)}>
+          {"<< Back"}
+        </button>
+        <h1 className={classes.title}>Add a New Ingredient</h1>
+      </header>
       {!loading ? (
         <Formik
           initialValues={{
@@ -80,7 +95,7 @@ const CreateIngredient = () => {
               resetForm({
                 values: {
                   name: "",
-                  ingredient_type_id: typeList[0].id,
+                  ingredient_type_id: typeList?.[0]?.id,
                   suggestions: "",
                 },
               });
