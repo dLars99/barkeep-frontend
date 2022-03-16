@@ -116,7 +116,7 @@ const CreateDrink = (): JSX.Element => {
           onSubmit={async (values, { resetForm }): Promise<void> => {
             console.log({ values });
             // const submitResponse = await axios.post(
-            //   `${API_URL}/ingredients`,
+            //   `${API_URL}/recipes`,
             //   values
             // );
             // if (submitResponse?.status === 201) {
@@ -152,10 +152,11 @@ const CreateDrink = (): JSX.Element => {
                 Ingredients
                 <FieldArray name="ingredients">
                   {(arrayHelpers: ArrayHelpers): JSX.Element => (
-                    <Form style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
                       {values.ingredients && values.ingredients.length > 0 ? (
                         values.ingredients.map((ingredient, index) => (
                           <DrinkIngredient
+                            key={index}
                             index={index}
                             ingredientList={ingredientList}
                             arrayHelpers={arrayHelpers}
@@ -169,7 +170,7 @@ const CreateDrink = (): JSX.Element => {
                           Add an Ingredient
                         </Button>
                       )}
-                    </Form>
+                    </div>
                   )}
                 </FieldArray>
               </label>

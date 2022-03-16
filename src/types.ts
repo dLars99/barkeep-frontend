@@ -30,3 +30,8 @@ export interface RecipeFormValues {
   glass2: string;
   ingredients: Ingredient[];
 }
+
+export interface QuantityFraction {
+  display: string;
+  value: number;
+}
