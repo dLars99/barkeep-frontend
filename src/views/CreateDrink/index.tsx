@@ -115,25 +115,25 @@ const CreateDrink = (): JSX.Element => {
           }}
           onSubmit={async (values, { resetForm }): Promise<void> => {
             console.log({ values });
-            // const submitResponse = await axios.post(
-            //   `${API_URL}/ingredients`,
-            //   values
-            // );
-            // if (submitResponse?.status === 201) {
-            //   resetForm({
-            //     values: {
-            //       name: "",
-            //       category_id: categoryList?.[0]?.id,
-            //       instructions: "",
-            //       rating: "",
-            //       glass1: "",
-            //       glass2: "",
-            //       ingredients: [],
-            //     },
-            //   });
-            // } else {
-            //   console.error("Error on recipe save");
-            // }
+            const submitResponse = await axios.post(
+              `${API_URL}/recipes`,
+              values
+            );
+            if (submitResponse?.status === 201) {
+              resetForm({
+                values: {
+                  name: "",
+                  category_id: categoryList?.[0]?.id,
+                  instructions: "",
+                  rating: "",
+                  glass1: "",
+                  glass2: "",
+                  ingredients: [],
+                },
+              });
+            } else {
+              console.error("Error on recipe save");
+            }
           }}
         >
           {({ values }: FormikProps<RecipeFormValues>): JSX.Element => (
