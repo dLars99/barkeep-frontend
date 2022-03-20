@@ -7,10 +7,11 @@ import {
   Field,
   FieldArray,
   ErrorMessage,
-  FormikErrors,
   ArrayHelpers,
   FormikProps,
+  FieldArrayRenderProps,
 } from "formik";
+import * as Yup from "yup";
 import { createUseStyles } from "react-jss";
 import { RecipeCategory, RecipeFormValues, Ingredient } from "../../types";
 import Button from "../../components/Button";
@@ -53,6 +54,29 @@ const useStyles = createUseStyles({
   },
 });
 
+const DrinkSchema = Yup.object().shape({
+  name: Yup.string().required("Required"),
+  ingredients: Yup.array()
+    .of(
+      Yup.object().shape({
+        id: Yup.string(),
+        qty: Yup.number().when("qtyFraction", {
+          is: "",
+          then: Yup.number().required("Whole or fraction quantity required"),
+        }),
+        qtyFraction: Yup.string(),
+        qtyType: Yup.string(),
+      })
+    )
+    .required("Must have ingredients")
+    .min(1, "Must have at least one ingredient"),
+  category_id: Yup.number().required("Category required"),
+  instructions: Yup.string(),
+  glass1: Yup.string(),
+  glass2: Yup.string(),
+  rating: Yup.string(),
+});
+
 const CreateDrink = (): JSX.Element => {
   const navigate = useNavigate();
   const classes = useStyles();
@@ -68,9 +92,7 @@ const CreateDrink = (): JSX.Element => {
           .get<Ingredient[]>(`${API_URL}/ingredients`)
           .catch((err: any) => console.error(err));
         if (!ingredients)
-          throw new Error(
-            "Could not retrieve ingredient ingredients from API!"
-          );
+          throw new Error("Could not retrieve ingredients from API!");
         setIngredientList(ingredients.data || []);
 
         const categories = await axios
@@ -106,13 +128,7 @@ const CreateDrink = (): JSX.Element => {
             glass2: "",
             ingredients: [],
           }}
-          validate={(
-            values: RecipeFormValues
-          ): FormikErrors<RecipeFormValues> => {
-            const errors: FormikErrors<RecipeFormValues> = {};
-            if (!values.name) errors.name = "Required";
-            return errors;
-          }}
+          validationSchema={DrinkSchema}
           onSubmit={async (values, { resetForm }): Promise<void> => {
             console.log({ values });
             // const submitResponse = await axios.post(
@@ -146,12 +162,12 @@ const CreateDrink = (): JSX.Element => {
                   name="name"
                   label="Name"
                 />
+                <ErrorMessage name="name" component="div" />
               </label>
-              <ErrorMessage name="name" component="div" />
               <label htmlFor="ingredients" className={classes.fieldLabel}>
                 Ingredients
                 <FieldArray name="ingredients">
-                  {(arrayHelpers: ArrayHelpers): JSX.Element => (
+                  {(arrayHelpers: FieldArrayRenderProps): JSX.Element => (
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       {values.ingredients && values.ingredients.length > 0 ? (
                         values.ingredients.map((ingredient, index) => (
@@ -165,7 +181,14 @@ const CreateDrink = (): JSX.Element => {
                       ) : (
                         <Button
                           type="button"
-                          onClick={() => arrayHelpers.push("")}
+                          onClick={() =>
+                            arrayHelpers.push({
+                              id: ingredientList?.[0]?.id,
+                              qty: 0,
+                              qtyFraction: "",
+                              qtyType: "",
+                            })
+                          }
                         >
                           Add an Ingredient
                         </Button>
@@ -173,6 +196,7 @@ const CreateDrink = (): JSX.Element => {
                     </div>
                   )}
                 </FieldArray>
+                <ErrorMessage name="ingredients" component="div" />
               </label>
               <label htmlFor="category_id" className={classes.fieldLabel}>
                 Category
@@ -191,7 +215,7 @@ const CreateDrink = (): JSX.Element => {
                     : "Could not retrieve category list"}
                 </Field>
               </label>
-              <ErrorMessage name="ingredient_type_id" component="div" />
+              <ErrorMessage name="category_id" component="div" />
               <label htmlFor="instructions" className={classes.fieldLabel}>
                 Instructions
                 <Field

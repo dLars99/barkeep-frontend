@@ -21,6 +21,13 @@ export interface RecipeCategory {
   name: string;
 }
 
+export interface RecipeIngredient {
+  name: string;
+  qty?: number;
+  qtyFraction?: string;
+  qtyType?: string;
+}
+
 export interface RecipeFormValues {
   name: string;
   category_id: string;
@@ -28,7 +35,7 @@ export interface RecipeFormValues {
   rating: string;
   glass1: string;
   glass2: string;
-  ingredients: Ingredient[];
+  ingredients: RecipeIngredient[];
 }
 
 export interface QuantityFraction {

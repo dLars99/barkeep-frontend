@@ -1,7 +1,15 @@
-import { ArrayHelpers, Field, useField } from "formik";
+import {
+  ArrayHelpers,
+  Field,
+  useField,
+  ErrorMessage,
+  FormikState,
+  FieldArrayRenderProps,
+  FieldArrayConfig,
+} from "formik";
 import { createUseStyles } from "react-jss";
 import Button from "../../components/Button";
-import { Ingredient, QuantityFraction } from "../../types";
+import { Ingredient, QuantityFraction, RecipeFormValues } from "../../types";
 import { fractions, quantityTypes } from "../../helpers/lists";
 
 const useStyles = createUseStyles({
@@ -38,11 +46,12 @@ const DrinkIngredient = ({
 }: {
   index: number;
   ingredientList: Ingredient[];
-  arrayHelpers: ArrayHelpers;
+  arrayHelpers: FieldArrayRenderProps;
 }) => {
   const classes = useStyles();
-  const [field] = useField("ingredients");
-  const { value } = field;
+  const { push, form } = arrayHelpers;
+  const { values } = form;
+  console.log(values.ingredients);
 
   return (
     <div className={classes.formField}>
@@ -56,7 +65,7 @@ const DrinkIngredient = ({
       <Field
         className={classes.ingredientSelection}
         as="select"
-        name={`ingredients[${index}].name`}
+        name={`ingredients[${index}].id`}
         label="Ingredient"
       >
         {ingredientList?.length
@@ -73,6 +82,7 @@ const DrinkIngredient = ({
         name={`ingredients[${index}].qty`}
         min={0}
       />
+      <ErrorMessage name={`ingredients[${index}].qty`} component="div" />
       <Field
         className={classes.quantityFractions}
         as="select"
@@ -88,11 +98,11 @@ const DrinkIngredient = ({
       <Field
         as="select"
         className={classes.quantityType}
-        name={`ingredinets[${index}].qtyType`}
+        name={`ingredients[${index}].qtyType`}
       >
         {quantityTypes.map((qtyType: string) => (
           <option key={qtyType} value={qtyType}>
-            {qtyType && value[index].qty > 1
+            {qtyType && values.ingredients[index].qty > 1
               ? qtyType === "dash"
                 ? qtyType + "es"
                 : qtyType + "s"
@@ -102,7 +112,14 @@ const DrinkIngredient = ({
       </Field>
       <Button
         type="button"
-        onClick={() => arrayHelpers.push(index)}
+        onClick={() => {
+          push({
+            id: ingredientList?.[0]?.id,
+            qty: 0,
+            qtyFraction: "",
+            qtyType: "",
+          });
+        }}
         className={classes.button}
       >
         {"\u002B"}
