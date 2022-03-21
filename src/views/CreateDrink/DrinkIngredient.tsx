@@ -8,6 +8,7 @@ const useStyles = createUseStyles({
   formField: {
     display: "flex",
     width: "100%",
+    margin: [5, 0],
   },
   button: {
     margin: [3, 6],
@@ -53,9 +54,8 @@ const DrinkIngredient = ({
   arrayHelpers: FieldArrayRenderProps;
 }) => {
   const classes = useStyles();
-  const { push, form } = arrayHelpers;
+  const { insert, form } = arrayHelpers;
   const { values } = form;
-  console.log(form);
 
   return (
     <div className={classes.formField}>
@@ -89,7 +89,7 @@ const DrinkIngredient = ({
                     )
                 )
                 .map((ingredient: Ingredient) => (
-                  <option key={ingredient.id} value={ingredient.id}>
+                  <option key={`ingredient-${index}`} value={ingredient.id}>
                     {ingredient.name}
                   </option>
                 ))
@@ -150,7 +150,7 @@ const DrinkIngredient = ({
       <Button
         type="button"
         onClick={() => {
-          push({
+          insert(index + 1, {
             // Push next available ingredient id
             id:
               ingredientList?.find((ingredient) =>

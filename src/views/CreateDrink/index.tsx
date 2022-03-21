@@ -43,13 +43,18 @@ const useStyles = createUseStyles({
   },
   fieldLabel: {
     fontSize: "1.3rem",
-    margin: [0, 0, 5],
+    margin: [0, 0, 25],
     alignSelf: "start",
     width: "100%",
   },
   formField: {
     width: "100%",
-    margin: [5, 0, 25],
+    margin: [10, 0, 5],
+  },
+  errorMessage: {
+    alignSelf: "flex-start",
+    color: "red",
+    fontSize: "14px",
   },
 });
 
@@ -161,7 +166,11 @@ const CreateDrink = (): JSX.Element => {
                   name="name"
                   label="Name"
                 />
-                <ErrorMessage name="name" component="div" />
+                <ErrorMessage
+                  name="name"
+                  component="div"
+                  className={classes.errorMessage}
+                />
               </label>
               <label htmlFor="ingredients" className={classes.fieldLabel}>
                 Ingredients
@@ -180,6 +189,7 @@ const CreateDrink = (): JSX.Element => {
                             <ErrorMessage
                               name={`ingredients[${index}].qty`}
                               component="div"
+                              className={classes.errorMessage}
                             />
                           </>
                         ))
@@ -202,7 +212,11 @@ const CreateDrink = (): JSX.Element => {
                   )}
                 </FieldArray>
                 {typeof errors.ingredients === "string" ? (
-                  <ErrorMessage name="ingredients" component="div" />
+                  <ErrorMessage
+                    name="ingredients"
+                    component="div"
+                    className={classes.errorMessage}
+                  />
                 ) : null}
               </label>
               <label htmlFor="category_id" className={classes.fieldLabel}>
