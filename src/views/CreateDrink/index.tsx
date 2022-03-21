@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -9,10 +9,18 @@ import {
   ErrorMessage,
   FormikProps,
   FieldArrayRenderProps,
+  FormikValues,
+  FormikState,
 } from "formik";
 import * as Yup from "yup";
 import { createUseStyles } from "react-jss";
-import { RecipeCategory, RecipeFormValues, Ingredient } from "../../types";
+import {
+  RecipeCategory,
+  RecipeFormValues,
+  RecipeFormResetValues,
+  Ingredient,
+  RecipeIngredient,
+} from "../../types";
 import Button from "../../components/Button";
 import DrinkIngredient from "./DrinkIngredient";
 
@@ -82,6 +90,42 @@ const DrinkSchema = Yup.object().shape({
   rating: Yup.string(),
 });
 
+const handleSubmit = async (
+  values: FormikValues,
+  resetForm: (
+    nextState?: Partial<FormikState<RecipeFormResetValues>> | undefined
+  ) => void
+): Promise<void> => {
+  // Assemble quantities
+  const preppedValues = {
+    ...values,
+    ingredients: values.ingredients.map((ingredient: RecipeIngredient) => {
+      const { qty, qtyFraction, qtyType } = ingredient;
+      return {
+        ingredient_id: ingredient.id,
+        quantity: `${(qty ?? 0) + Number(qtyFraction ?? 0)} ${qtyType}`,
+      };
+    }),
+  };
+  console.log({ preppedValues });
+  // const submitResponse = await axios.post(`${API_URL}/recipes`, values);
+  // if (submitResponse?.status === 201) {
+  //   resetForm({
+  //     values: {
+  //       name: "",
+  //       category_id: categoryList?.[0]?.id,
+  //       instructions: "",
+  //       rating: "",
+  //       glass1: "",
+  //       glass2: "",
+  //       ingredients: [],
+  //     },
+  //   });
+  // } else {
+  //   console.error("Error on recipe save");
+  // }
+};
+
 const CreateDrink = (): JSX.Element => {
   const navigate = useNavigate();
   const classes = useStyles();
@@ -134,28 +178,9 @@ const CreateDrink = (): JSX.Element => {
             ingredients: [],
           }}
           validationSchema={DrinkSchema}
-          onSubmit={async (values, { resetForm }): Promise<void> => {
-            console.log({ values });
-            // const submitResponse = await axios.post(
-            //   `${API_URL}/recipes`,
-            //   values
-            // );
-            // if (submitResponse?.status === 201) {
-            //   resetForm({
-            //     values: {
-            //       name: "",
-            //       category_id: categoryList?.[0]?.id,
-            //       instructions: "",
-            //       rating: "",
-            //       glass1: "",
-            //       glass2: "",
-            //       ingredients: [],
-            //     },
-            //   });
-            // } else {
-            //   console.error("Error on recipe save");
-            // }
-          }}
+          onSubmit={(values, { resetForm }): Promise<void> =>
+            handleSubmit(values, resetForm)
+          }
         >
           {({ values, errors }: FormikProps<RecipeFormValues>): JSX.Element => (
             <Form className={classes.formRoot}>
@@ -176,29 +201,28 @@ const CreateDrink = (): JSX.Element => {
               <label htmlFor="ingredients" className={classes.fieldLabel}>
                 Ingredients
                 <FieldArray name="ingredients">
-                  {(arrayHelpers: FieldArrayRenderProps): JSX.Element => (
+                  {(renderProps: FieldArrayRenderProps): JSX.Element => (
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       {values.ingredients && values.ingredients.length > 0 ? (
                         values.ingredients.map((ingredient, index) => (
-                          <>
+                          <React.Fragment key={index}>
                             <DrinkIngredient
-                              key={index}
                               index={index}
                               ingredientList={ingredientList}
-                              arrayHelpers={arrayHelpers}
+                              renderProps={renderProps}
                             />
                             <ErrorMessage
                               name={`ingredients[${index}].qty`}
                               component="div"
                               className={classes.errorMessage}
                             />
-                          </>
+                          </React.Fragment>
                         ))
                       ) : (
                         <Button
                           type="button"
                           onClick={() =>
-                            arrayHelpers.push({
+                            renderProps.push({
                               id: ingredientList?.[0]?.id,
                               qty: 0,
                               qtyFraction: "",

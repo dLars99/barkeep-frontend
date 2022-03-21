@@ -54,21 +54,21 @@ const useStyles = createUseStyles({
 const DrinkIngredient = ({
   index,
   ingredientList,
-  arrayHelpers,
+  renderProps,
 }: {
   index: number;
   ingredientList: Ingredient[];
-  arrayHelpers: FieldArrayRenderProps;
+  renderProps: FieldArrayRenderProps;
 }) => {
   const classes = useStyles();
-  const { insert, form } = arrayHelpers;
+  const { remove, insert, form } = renderProps;
   const { values } = form;
 
   return (
     <div className={classes.formField}>
       <Button
         type="button"
-        onClick={() => arrayHelpers.remove(index)}
+        onClick={() => remove(index)}
         className={classes.button}
       >
         {"\u2212"}
@@ -127,7 +127,10 @@ const DrinkIngredient = ({
           label="Fraction"
         >
           {fractions.map((fraction: QuantityFraction) => (
-            <option key={fraction.value} value={fraction.value}>
+            <option
+              key={fraction.value || "noQtyFraction"}
+              value={fraction.value}
+            >
               {fraction.display}
             </option>
           ))}
@@ -144,7 +147,7 @@ const DrinkIngredient = ({
           name={`ingredients[${index}].qtyType`}
         >
           {quantityTypes.map((qtyType: string) => (
-            <option key={qtyType} value={qtyType}>
+            <option key={qtyType || "noQtyType"} value={qtyType}>
               {qtyType && values.ingredients[index].qty > 1
                 ? qtyType === "dash"
                   ? qtyType + "es"

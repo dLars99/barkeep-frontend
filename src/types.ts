@@ -22,7 +22,7 @@ export interface RecipeCategory {
 }
 
 export interface RecipeIngredient {
-  name: string;
+  id: string;
   qty?: number;
   qtyFraction?: string;
   qtyType?: string;
@@ -38,6 +38,9 @@ export interface RecipeFormValues {
   ingredients: RecipeIngredient[];
 }
 
+export interface RecipeFormResetValues extends RecipeFormValues {
+  ingredients: never[];
+}
 export interface QuantityFraction {
   display: string;
   value: number;
