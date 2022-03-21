@@ -28,6 +28,12 @@ const useStyles = createUseStyles({
     width: "100%",
     composes: "$fieldLabel",
   },
+  numberBox: {
+    width: "100%",
+    flex: 2,
+    fontSize: "16px",
+    margin: [5, 0],
+  },
   quantityFractions: {
     flex: 2,
     composes: "$fieldLabel",
@@ -41,6 +47,7 @@ const useStyles = createUseStyles({
     height: "100%",
     color: "black",
     fontSize: "16px",
+    margin: [5, 0],
   },
 });
 
@@ -102,7 +109,7 @@ const DrinkIngredient = ({
       >
         Qty
         <Field
-          className={classes.quantityField}
+          className={classes.numberBox}
           type="number"
           name={`ingredients[${index}].qty`}
           min={0}

@@ -50,6 +50,7 @@ const useStyles = createUseStyles({
   formField: {
     width: "100%",
     margin: [10, 0, 5],
+    fontSize: "16px",
   },
   errorMessage: {
     alignSelf: "flex-start",
@@ -241,7 +242,8 @@ const CreateDrink = (): JSX.Element => {
                 Instructions
                 <Field
                   className={classes.formField}
-                  type="textarea"
+                  as="textarea"
+                  rows={8}
                   name="instructions"
                   label="Instructions"
                   placeholder="Put more details here"
