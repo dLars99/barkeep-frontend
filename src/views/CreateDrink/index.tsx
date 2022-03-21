@@ -7,7 +7,6 @@ import {
   Field,
   FieldArray,
   ErrorMessage,
-  ArrayHelpers,
   FormikProps,
   FieldArrayRenderProps,
 } from "formik";
@@ -55,14 +54,14 @@ const useStyles = createUseStyles({
 });
 
 const DrinkSchema = Yup.object().shape({
-  name: Yup.string().required("Required"),
+  name: Yup.string().trim().required("Required"),
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
         id: Yup.string(),
         qty: Yup.number().when("qtyFraction", {
-          is: "",
-          then: Yup.number().required("Whole or fraction quantity required"),
+          is: (qtyFraction: string) => !qtyFraction,
+          then: Yup.number().min(1, "Whole or fraction quantity required"),
         }),
         qtyFraction: Yup.string(),
         qtyType: Yup.string(),
@@ -152,7 +151,7 @@ const CreateDrink = (): JSX.Element => {
             // }
           }}
         >
-          {({ values }: FormikProps<RecipeFormValues>): JSX.Element => (
+          {({ values, errors }: FormikProps<RecipeFormValues>): JSX.Element => (
             <Form className={classes.formRoot}>
               <label htmlFor="name" className={classes.fieldLabel}>
                 Name
@@ -171,12 +170,18 @@ const CreateDrink = (): JSX.Element => {
                     <div style={{ display: "flex", flexDirection: "column" }}>
                       {values.ingredients && values.ingredients.length > 0 ? (
                         values.ingredients.map((ingredient, index) => (
-                          <DrinkIngredient
-                            key={index}
-                            index={index}
-                            ingredientList={ingredientList}
-                            arrayHelpers={arrayHelpers}
-                          />
+                          <>
+                            <DrinkIngredient
+                              key={index}
+                              index={index}
+                              ingredientList={ingredientList}
+                              arrayHelpers={arrayHelpers}
+                            />
+                            <ErrorMessage
+                              name={`ingredients[${index}].qty`}
+                              component="div"
+                            />
+                          </>
                         ))
                       ) : (
                         <Button
@@ -196,7 +201,9 @@ const CreateDrink = (): JSX.Element => {
                     </div>
                   )}
                 </FieldArray>
-                <ErrorMessage name="ingredients" component="div" />
+                {typeof errors.ingredients === "string" ? (
+                  <ErrorMessage name="ingredients" component="div" />
+                ) : null}
               </label>
               <label htmlFor="category_id" className={classes.fieldLabel}>
                 Category
