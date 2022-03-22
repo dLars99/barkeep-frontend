@@ -32,7 +32,7 @@ export interface RecipeFormValues {
   name: string;
   category_id: string;
   instructions: string;
-  rating: string;
+  rating: number;
   glass1: string;
   glass2: string;
   ingredients: RecipeIngredient[];

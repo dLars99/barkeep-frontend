@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import {
   Formik,
   Form,
@@ -92,6 +92,7 @@ const DrinkSchema = Yup.object().shape({
 
 const handleSubmit = async (
   values: FormikValues,
+  categoryList: RecipeCategory[],
   resetForm: (
     nextState?: Partial<FormikState<RecipeFormResetValues>> | undefined
   ) => void
@@ -100,30 +101,32 @@ const handleSubmit = async (
   const preppedValues = {
     ...values,
     ingredients: values.ingredients.map((ingredient: RecipeIngredient) => {
-      const { qty, qtyFraction, qtyType } = ingredient;
+      const { id, qty, qtyFraction, qtyType } = ingredient;
       return {
-        ingredient_id: ingredient.id,
-        quantity: `${(qty ?? 0) + Number(qtyFraction ?? 0)} ${qtyType}`,
+        ingredient_id: id,
+        quantity: `${(qty ?? 0) + Number(qtyFraction ?? 0)}`,
+        quantity_type: qtyType,
       };
     }),
   };
-  console.log({ preppedValues });
-  // const submitResponse = await axios.post(`${API_URL}/recipes`, values);
-  // if (submitResponse?.status === 201) {
-  //   resetForm({
-  //     values: {
-  //       name: "",
-  //       category_id: categoryList?.[0]?.id,
-  //       instructions: "",
-  //       rating: "",
-  //       glass1: "",
-  //       glass2: "",
-  //       ingredients: [],
-  //     },
-  //   });
-  // } else {
-  //   console.error("Error on recipe save");
-  // }
+  const submitResponse = await axios
+    .post(`${API_URL}/recipes`, preppedValues)
+    .catch((err: AxiosError) => console.error(err));
+  if (submitResponse?.status === 201) {
+    resetForm({
+      values: {
+        name: "",
+        category_id: categoryList?.[0]?.id,
+        instructions: "",
+        rating: 0,
+        glass1: "",
+        glass2: "",
+        ingredients: [],
+      },
+    });
+  } else {
+    console.error("Error on recipe save");
+  }
 };
 
 const CreateDrink = (): JSX.Element => {
@@ -172,14 +175,14 @@ const CreateDrink = (): JSX.Element => {
             name: "",
             category_id: categoryList?.[0]?.id,
             instructions: "",
-            rating: "",
+            rating: 0,
             glass1: "",
             glass2: "",
             ingredients: [],
           }}
           validationSchema={DrinkSchema}
           onSubmit={(values, { resetForm }): Promise<void> =>
-            handleSubmit(values, resetForm)
+            handleSubmit(values, categoryList, resetForm)
           }
         >
           {({ values, errors }: FormikProps<RecipeFormValues>): JSX.Element => (
