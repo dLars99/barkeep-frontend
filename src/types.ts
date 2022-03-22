@@ -3,8 +3,45 @@ export interface IngredientType {
   name: string;
 }
 
+export interface Ingredient {
+  id: string;
+  name: string;
+  ingredient_type_id: string;
+  suggestions?: string;
+}
+
 export interface IngredientFormValues {
   name: string;
   ingredient_type_id: string;
   suggestions: string;
+}
+
+export interface RecipeCategory {
+  id: string;
+  name: string;
+}
+
+export interface RecipeIngredient {
+  id: string;
+  qty?: number;
+  qtyFraction?: string;
+  qtyType?: string;
+}
+
+export interface RecipeFormValues {
+  name: string;
+  category_id: string;
+  instructions: string;
+  rating: number;
+  glass1: string;
+  glass2: string;
+  ingredients: RecipeIngredient[];
+}
+
+export interface RecipeFormResetValues extends RecipeFormValues {
+  ingredients: never[];
+}
+export interface QuantityFraction {
+  display: string;
+  value: number;
 }
