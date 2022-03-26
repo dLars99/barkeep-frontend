@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
 import { createUseStyles } from "react-jss";
 import { IngredientType, IngredientFormValues } from "../../types";
@@ -53,7 +53,7 @@ const CreateIngredient = (): JSX.Element => {
       (async (): Promise<void> => {
         const types = await axios
           .get<IngredientType[]>(`${API_URL}/types`)
-          .catch((err: any) => console.error(err));
+          .catch((err: AxiosError) => console.error(err));
         if (!types)
           throw new Error("Could not retrieve ingredient types from API!");
         setTypeList(types.data || []);
