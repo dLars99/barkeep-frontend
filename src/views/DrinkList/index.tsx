@@ -81,13 +81,21 @@ const DrinkList = () => {
       </section>
       <footer className={classes.paginator}>
         {totalPages > 1 ? (
-          <Button disabled={page === 1} className={classes.pageButton}>
+          <Button
+            disabled={page === 1}
+            className={classes.pageButton}
+            onClick={() => setPage(page - 1)}
+          >
             &minus;
           </Button>
         ) : null}
         <div>{`Page ${page} of ${totalPages}`}</div>
         {totalPages > 1 ? (
-          <Button disabled={page === totalPages} className={classes.pageButton}>
+          <Button
+            disabled={page === totalPages}
+            className={classes.pageButton}
+            onClick={() => setPage(page + 1)}
+          >
             {"\u002B"}
           </Button>
         ) : null}
