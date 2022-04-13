@@ -3,10 +3,13 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   drinkCard: {
-    margin: 4,
+    margin: 8,
     border: "1px solid black",
     borderRadius: 10,
-    maxWidth: 400,
+    width: "100%",
+    "@media (min-width: 480px)": {
+      width: "50%",
+    },
   },
   drinkTitle: {
     textAlign: "center",
