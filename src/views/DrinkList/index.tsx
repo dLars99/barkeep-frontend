@@ -9,18 +9,24 @@ import Button from "../../components/Button";
 const useStyles = createUseStyles({
   header: {
     display: "flex",
-    marginTop: 30,
+    flexDirection: "column",
+    margin: [30, 8, 0],
+    "@media (min-width: 480px)": {
+      flexDirection: "row",
+      margin: [30, 16, 0],
+    },
   },
   backButton: {
     background: "transparent",
     border: "none",
-    width: 80,
   },
   title: {
     position: "relative",
-    left: -20,
-    width: "100%",
+    flex: 1,
     textAlign: "center",
+  },
+  filters: {
+    flex: 2,
   },
   drinkList: {
     display: "flex",
@@ -54,15 +60,19 @@ const DrinkList = () => {
   );
 
   const getDrinks = useCallback(async () => {
-    const drinksFromApi = await axios
-      .get(`${API_URL}/recipes`, {
-        params: { limit: LIMIT, offset: page * LIMIT },
-      })
-      .catch((err: AxiosError) => {
-        console.error(err);
-      });
-    if (!drinksFromApi) throw new Error("Could not retrieve drinks");
-    setDrinks(drinksFromApi.data || []);
+    try {
+      const drinksFromApi = await axios
+        .get(`${API_URL}/recipes`, {
+          params: { limit: LIMIT, offset: page * LIMIT },
+        })
+        .catch((err: AxiosError) => {
+          console.error(err);
+        });
+      if (!drinksFromApi) throw new Error("Could not retrieve drinks");
+      setDrinks(drinksFromApi.data || []);
+    } catch (err) {
+      console.error(err);
+    }
   }, [page]);
 
   useEffect(() => {
@@ -72,10 +82,13 @@ const DrinkList = () => {
   return (
     <div>
       <header className={classes.header}>
-        <button className={classes.backButton} onClick={() => navigate(-1)}>
-          {"<< Back"}
-        </button>
-        <h1 className={classes.title}>Find a Drink</h1>
+        <div>
+          <button className={classes.backButton} onClick={() => navigate(-1)}>
+            {"<< Back"}
+          </button>
+          <h1 className={classes.title}>Find a Drink</h1>
+        </div>
+        <div className={classes.filters}>{/* Search Bar */}</div>
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
