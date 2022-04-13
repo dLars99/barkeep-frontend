@@ -4,17 +4,7 @@ import { Drink } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 
-const useStyles = createUseStyles({
-  drinkCard: {
-    margin: 4,
-    border: "1px solid black",
-    borderRadius: 10,
-    maxWidth: 400,
-  },
-  drinkTitle: {
-    textAlign: "center",
-  },
-});
+const useStyles = createUseStyles({});
 
 const LIMIT = 10;
 const API_URL = process.env.REACT_APP_API_URL;
@@ -43,7 +33,7 @@ const DrinkList = () => {
   return (
     <>
       {drinks.map((drink) => (
-        <DrinkCard drink={drink} />
+        <DrinkCard key={drink.id} drink={drink} />
       ))}
     </>
   );

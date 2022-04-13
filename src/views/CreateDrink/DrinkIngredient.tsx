@@ -95,7 +95,7 @@ const DrinkIngredient = ({
                         ingredient.id === selectedIngredient.id
                     )
                 )
-                .map((ingredient: Ingredient) => (
+                .map((ingredient: Ingredient, index: number) => (
                   <option key={`ingredient-${index}`} value={ingredient.id}>
                     {ingredient.name}
                   </option>
