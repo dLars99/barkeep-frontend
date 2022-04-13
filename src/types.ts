@@ -45,3 +45,20 @@ export interface QuantityFraction {
   display: string;
   value: number;
 }
+
+export interface StructuredRecipeIngredient {
+  id: number;
+  name: string;
+  quantity: number;
+  quantity_type: string;
+}
+export interface Drink {
+  id: number;
+  name: string;
+  category: string;
+  instructions: string;
+  rating: number;
+  glass1: string;
+  glass2: string;
+  ingredients: StructuredRecipeIngredient[];
+}
