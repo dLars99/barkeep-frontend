@@ -10,6 +10,12 @@ const useStyles = createUseStyles({
     "@media (min-width: 480px)": {
       width: "50%",
     },
+    "@media (min-width: 768px)": {
+      margin: 16,
+    },
+    "@media (min-width: 1024px)": {
+      width: "33.3%",
+    },
   },
   drinkTitle: {
     textAlign: "center",

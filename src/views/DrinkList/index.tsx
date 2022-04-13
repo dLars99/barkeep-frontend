@@ -30,6 +30,9 @@ const useStyles = createUseStyles({
     display: "flex",
     justifyContent: "flex-end",
     paddingRight: 8,
+    "@media (min-width: 768px)": {
+      paddingRight: 16,
+    },
   },
   pageButton: {
     margin: [0, 4],
