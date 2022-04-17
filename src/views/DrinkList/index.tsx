@@ -34,20 +34,18 @@ const useStyles = createUseStyles({
     width: "100%",
   },
   drinkCard: {
-    drinkCard: {
-      margin: 8,
-      border: "1px solid black",
-      borderRadius: 10,
-      width: "100%",
-      "@media (min-width: 480px)": {
-        width: "50%",
-      },
-      "@media (min-width: 768px)": {
-        margin: 16,
-      },
-      "@media (min-width: 1024px)": {
-        width: "33.3%",
-      },
+    margin: 8,
+    border: "1px solid black",
+    borderRadius: 10,
+    width: "100%",
+    "@media (min-width: 480px)": {
+      width: "50%",
+    },
+    "@media (min-width: 768px)": {
+      margin: 16,
+    },
+    "@media (min-width: 1024px)": {
+      width: "33.3%",
     },
   },
   paginator: {
@@ -111,7 +109,10 @@ const DrinkList = () => {
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
-          <div onClick={() => setSelectedDrink(drink)}>
+          <div
+            className={classes.drinkCard}
+            onClick={() => setSelectedDrink(drink)}
+          >
             <DrinkCard key={drink.id} drink={drink} />
           </div>
         ))}
