@@ -110,6 +110,7 @@ const DrinkList = () => {
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
           <div
+            key={drink.id}
             className={classes.drinkCard}
             onClick={() => setSelectedDrink(drink)}
           >

@@ -55,6 +55,7 @@ export interface StructuredRecipeIngredient {
 export interface Drink {
   id: number;
   name: string;
+  category_id?: string;
   category: string;
   instructions: string;
   rating: number;
