@@ -138,7 +138,12 @@ const DrinkList = () => {
           </Button>
         ) : null}
       </footer>
-      {selectedDrink ? <DrinkDetail drink={selectedDrink} /> : null}
+      {selectedDrink ? (
+        <DrinkDetail
+          drink={selectedDrink}
+          setSelectedDrink={setSelectedDrink}
+        />
+      ) : null}
     </div>
   );
 };
