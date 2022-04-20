@@ -36,45 +36,48 @@ const DrinkDetail = ({
   const classes = useStyles();
   const [edit, setEdit] = useState<boolean>(false);
 
+  const handleClose = (): void => {
+    setSelectedDrink(undefined);
+  };
+
   return (
-    <div
-      className={classes.overlay}
-      onClick={() => !edit && setSelectedDrink(undefined)}
-    >
-      {edit ? (
-        <CreateDrink />
-      ) : (
-        <div className={classes.detailCard}>
-          <Button
-            id="editButton"
-            type="button"
-            onClick={(e: SyntheticEvent | undefined) => {
-              e?.stopPropagation();
-              setEdit(true);
-            }}
-          >
-            Edit
-          </Button>
-          <h1>{drink.name}</h1>
-          <h2>{drink.category}</h2>
-          <IngredientList ingredients={drink.ingredients} />
-          <h3>Instructions</h3>
-          <p>{drink.instructions}</p>
-          {drink.glass1 || drink.glass2 ? (
-            <p>
-              Glass:
-              {drink.glass1 ? <span>{` ${drink.glass1}`}</span> : null}
-              {drink.glass2 ? <span>{`, ${drink.glass2}`}</span> : null}
-            </p>
-          ) : null}
-          {Number(drink.rating) ? (
-            <p>
-              Rating:
-              <span>{` ${drink.rating}`}</span>
-            </p>
-          ) : null}
-        </div>
-      )}
+    <div className={classes.overlay} onClick={() => !edit && handleClose()}>
+      <div className={classes.detailCard}>
+        {edit ? (
+          <CreateDrink editId={drink.id} handleBack={handleClose} />
+        ) : (
+          <div>
+            <Button
+              id="editButton"
+              type="button"
+              onClick={(e: SyntheticEvent | undefined) => {
+                e?.stopPropagation();
+                setEdit(true);
+              }}
+            >
+              Edit
+            </Button>
+            <h1>{drink.name}</h1>
+            <h2>{drink.category}</h2>
+            <IngredientList ingredients={drink.ingredients} />
+            <h3>Instructions</h3>
+            <p>{drink.instructions}</p>
+            {drink.glass1 || drink.glass2 ? (
+              <p>
+                Glass:
+                {drink.glass1 ? <span>{` ${drink.glass1}`}</span> : null}
+                {drink.glass2 ? <span>{`, ${drink.glass2}`}</span> : null}
+              </p>
+            ) : null}
+            {Number(drink.rating) ? (
+              <p>
+                Rating:
+                <span>{` ${drink.rating}`}</span>
+              </p>
+            ) : null}
+          </div>
+        )}
+      </div>
     </div>
   );
 };

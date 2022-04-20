@@ -129,7 +129,13 @@ const handleSubmit = async (
   }
 };
 
-const CreateDrink = (): JSX.Element => {
+const CreateDrink = ({
+  editId,
+  handleBack,
+}: {
+  editId?: number;
+  handleBack?: () => void;
+}): JSX.Element => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
@@ -164,7 +170,10 @@ const CreateDrink = (): JSX.Element => {
   return (
     <div>
       <header className={classes.header}>
-        <button className={classes.backButton} onClick={() => navigate(-1)}>
+        <button
+          className={classes.backButton}
+          onClick={() => (editId && handleBack ? handleBack() : navigate(-1))}
+        >
           {"<< Back"}
         </button>
         <h1 className={classes.title}>Add a New Drink</h1>
