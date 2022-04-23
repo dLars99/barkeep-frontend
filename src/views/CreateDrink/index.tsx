@@ -151,14 +151,14 @@ const CreateDrink = ({
       (async (): Promise<void> => {
         if (editId) {
           const drink = await axios
-            .get<Drink>(`${API_URL}/recipes`, {
+            .get<Drink[]>(`${API_URL}/recipes`, {
               params: {
                 id: editId,
               },
             })
             .catch((err: AxiosError) => console.error(err));
           if (!drink) throw new Error("Could not retrieve drink from API");
-          setDrink(drink.data);
+          setDrink(drink.data[0]);
         }
         const ingredients = await axios
           .get<Ingredient[]>(`${API_URL}/ingredients`)
@@ -214,6 +214,7 @@ const CreateDrink = ({
       </header>
       {!loading ? (
         <Formik
+          enableReinitialize
           initialValues={{
             name: drink?.name || "",
             category_id: drink?.category_id || categoryList?.[0]?.id,

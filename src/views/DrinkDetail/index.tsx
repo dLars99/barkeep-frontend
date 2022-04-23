@@ -17,7 +17,7 @@ const useStyles = createUseStyles({
   },
   detailCard: {
     margin: [30, "auto"],
-    padding: 12,
+    padding: [12, 20],
     width: "50%",
     border: "1px solid black",
     borderRadius: 10,
