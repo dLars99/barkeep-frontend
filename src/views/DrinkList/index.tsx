@@ -5,6 +5,7 @@ import { Drink } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 import Button from "../../components/Button";
+import DrinkDetail from "../DrinkDetail";
 
 const useStyles = createUseStyles({
   header: {
@@ -32,6 +33,21 @@ const useStyles = createUseStyles({
     display: "flex",
     width: "100%",
   },
+  drinkCard: {
+    margin: 8,
+    border: "1px solid black",
+    borderRadius: 10,
+    width: "100%",
+    "@media (min-width: 480px)": {
+      width: "50%",
+    },
+    "@media (min-width: 768px)": {
+      margin: 16,
+    },
+    "@media (min-width: 1024px)": {
+      width: "33.3%",
+    },
+  },
   paginator: {
     display: "flex",
     justifyContent: "flex-end",
@@ -53,6 +69,7 @@ const DrinkList = () => {
   const navigate = useNavigate();
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [page, setPage] = useState<number>(1);
+  const [selectedDrink, setSelectedDrink] = useState<Drink>();
 
   const totalPages = useMemo<number>(
     () => Math.ceil(drinks.length / LIMIT),
@@ -92,7 +109,13 @@ const DrinkList = () => {
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
-          <DrinkCard key={drink.id} drink={drink} />
+          <div
+            key={drink.id}
+            className={classes.drinkCard}
+            onClick={() => setSelectedDrink(drink)}
+          >
+            <DrinkCard key={drink.id} drink={drink} />
+          </div>
         ))}
       </section>
       <footer className={classes.paginator}>
@@ -116,6 +139,12 @@ const DrinkList = () => {
           </Button>
         ) : null}
       </footer>
+      {selectedDrink ? (
+        <DrinkDetail
+          drink={selectedDrink}
+          setSelectedDrink={setSelectedDrink}
+        />
+      ) : null}
     </div>
   );
 };

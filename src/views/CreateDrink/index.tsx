@@ -20,6 +20,8 @@ import {
   RecipeFormResetValues,
   Ingredient,
   RecipeIngredient,
+  StructuredRecipeIngredient,
+  Drink,
 } from "../../types";
 import Button from "../../components/Button";
 import DrinkIngredient from "./DrinkIngredient";
@@ -129,9 +131,16 @@ const handleSubmit = async (
   }
 };
 
-const CreateDrink = (): JSX.Element => {
+const CreateDrink = ({
+  editId,
+  handleBack,
+}: {
+  editId?: number;
+  handleBack?: () => void;
+}): JSX.Element => {
   const navigate = useNavigate();
   const classes = useStyles();
+  const [drink, setDrink] = useState<Drink>();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
   const [categoryList, setCategoryList] = useState<RecipeCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -140,16 +149,27 @@ const CreateDrink = (): JSX.Element => {
   useEffect(() => {
     try {
       (async (): Promise<void> => {
+        if (editId) {
+          const drink = await axios
+            .get<Drink>(`${API_URL}/recipes`, {
+              params: {
+                id: editId,
+              },
+            })
+            .catch((err: AxiosError) => console.error(err));
+          if (!drink) throw new Error("Could not retrieve drink from API");
+          setDrink(drink.data);
+        }
         const ingredients = await axios
           .get<Ingredient[]>(`${API_URL}/ingredients`)
-          .catch((err: any) => console.error(err));
+          .catch((err: AxiosError) => console.error(err));
         if (!ingredients)
           throw new Error("Could not retrieve ingredients from API!");
         setIngredientList(ingredients.data || []);
 
         const categories = await axios
           .get<RecipeCategory[]>(`${API_URL}/categories`)
-          .catch((err: any) => console.error(err));
+          .catch((err: AxiosError) => console.error(err));
         if (!categories)
           throw new Error("Could not retrieve ingredient categories from API!");
         setCategoryList(categories.data || []);
@@ -159,12 +179,35 @@ const CreateDrink = (): JSX.Element => {
     } catch (err: any | unknown) {
       console.error(err);
     }
-  }, []);
+  }, [editId]);
+
+  const mappedIngredients = (
+    drink: Drink | undefined
+  ): RecipeIngredient[] | undefined => {
+    if (!drink) return;
+    const formIngredients = drink.ingredients?.map(
+      (ingredient: StructuredRecipeIngredient) => {
+        const qty = Math.floor(ingredient.quantity);
+        const qtyFraction = String(ingredient.quantity - qty);
+        return {
+          id: String(ingredient.id),
+          name: ingredient.name,
+          qty,
+          qtyFraction,
+          qtyType: ingredient.quantity_type,
+        };
+      }
+    );
+    return formIngredients;
+  };
 
   return (
     <div>
       <header className={classes.header}>
-        <button className={classes.backButton} onClick={() => navigate(-1)}>
+        <button
+          className={classes.backButton}
+          onClick={() => (editId && handleBack ? handleBack() : navigate(-1))}
+        >
           {"<< Back"}
         </button>
         <h1 className={classes.title}>Add a New Drink</h1>
@@ -172,13 +215,13 @@ const CreateDrink = (): JSX.Element => {
       {!loading ? (
         <Formik
           initialValues={{
-            name: "",
-            category_id: categoryList?.[0]?.id,
-            instructions: "",
-            rating: 0,
-            glass1: "",
-            glass2: "",
-            ingredients: [],
+            name: drink?.name || "",
+            category_id: drink?.category_id || categoryList?.[0]?.id,
+            instructions: drink?.instructions || "",
+            rating: drink?.rating || 0,
+            glass1: drink?.glass1 || "",
+            glass2: drink?.glass2 || "",
+            ingredients: mappedIngredients(drink) ?? [],
           }}
           validationSchema={DrinkSchema}
           onSubmit={(values, { resetForm }): Promise<void> =>
