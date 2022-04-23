@@ -29,6 +29,7 @@ export interface RecipeIngredient {
 }
 
 export interface RecipeFormValues {
+  id: number | undefined;
   name: string;
   category_id: string;
   instructions: string;
