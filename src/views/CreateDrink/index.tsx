@@ -115,14 +115,18 @@ const handleSubmit = async (
   let submitResponse: void | AxiosResponse;
   if (editId) {
     submitResponse = await axios
-      .put(`${API_URL}/recipes`, preppedValues)
+      .put(`${API_URL}/recipes/${values.id}`, preppedValues)
       .catch((err: AxiosError) => console.error(err));
   } else {
     submitResponse = await axios
       .post(`${API_URL}/recipes`, preppedValues)
       .catch((err: AxiosError) => console.error(err));
   }
-  if (submitResponse?.status === 201) {
+  if (
+    submitResponse?.status &&
+    submitResponse.status >= 200 &&
+    submitResponse.status < 300
+  ) {
     resetForm({
       values: {
         id: undefined,
