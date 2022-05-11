@@ -96,8 +96,8 @@ const DrinkList = () => {
   }, [page]);
 
   useEffect(() => {
-    getDrinks();
-  }, [getDrinks]);
+    if (!selectedDrink) getDrinks();
+  }, [getDrinks, selectedDrink]);
 
   return (
     <div>
