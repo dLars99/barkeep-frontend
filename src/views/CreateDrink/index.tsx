@@ -98,7 +98,8 @@ const handleSubmit = async (
   categoryList: RecipeCategory[],
   resetForm: (
     nextState?: Partial<FormikState<RecipeFormResetValues>> | undefined
-  ) => void
+  ) => void,
+  handleBack: (() => void) | undefined
 ): Promise<void> => {
   // Assemble quantities
   const preppedValues = {
@@ -139,6 +140,7 @@ const handleSubmit = async (
         ingredients: [],
       },
     });
+    if (handleBack) handleBack();
   } else {
     console.error("Error on recipe save");
   }
@@ -240,7 +242,7 @@ const CreateDrink = ({
           }}
           validationSchema={DrinkSchema}
           onSubmit={(values, { resetForm }): Promise<void> =>
-            handleSubmit(editId, values, categoryList, resetForm)
+            handleSubmit(editId, values, categoryList, resetForm, handleBack)
           }
         >
           {({ values, errors }: FormikProps<RecipeFormValues>): JSX.Element => (
