@@ -6,6 +6,7 @@ import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
+import SearchBar from "./SearchBar";
 
 const useStyles = createUseStyles({
   header: {
@@ -70,6 +71,7 @@ const API_URL = process.env.REACT_APP_API_URL;
 const DrinkList = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [query, setQuery] = useState<string>();
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [page, setPage] = useState<number>(1);
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
@@ -83,7 +85,7 @@ const DrinkList = () => {
     try {
       const drinksFromApi = await axios
         .get(`${API_URL}/recipes`, {
-          params: { limit: LIMIT, offset: page * LIMIT },
+          params: { limit: LIMIT, offset: page * LIMIT, query },
         })
         .catch((err: AxiosError) => {
           console.error(err);
@@ -93,12 +95,13 @@ const DrinkList = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [page]);
+  }, [page, query]);
 
   useEffect(() => {
     if (!selectedDrink) getDrinks();
   }, [getDrinks, selectedDrink]);
 
+  console.log({ query });
   return (
     <div>
       <header className={classes.header}>
@@ -108,7 +111,9 @@ const DrinkList = () => {
           </button>
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
-        <div className={classes.filters}>{/* Search Bar */}</div>
+        <div className={classes.filters}>
+          <SearchBar query={query} setQuery={setQuery} />
+        </div>
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
