@@ -34,6 +34,7 @@ const useStyles = createUseStyles({
     display: "flex",
     flexFlow: "row wrap",
     width: "100%",
+    justifyContent: "space-evenly",
   },
   drinkCard: {
     margin: 8,
