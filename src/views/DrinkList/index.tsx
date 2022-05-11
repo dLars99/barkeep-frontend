@@ -71,7 +71,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 const DrinkList = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-  const [query, setQuery] = useState<string>();
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [page, setPage] = useState<number>(1);
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
@@ -81,27 +80,30 @@ const DrinkList = () => {
     [drinks.length]
   );
 
-  const getDrinks = useCallback(async () => {
-    try {
-      const drinksFromApi = await axios
-        .get(`${API_URL}/recipes`, {
-          params: { limit: LIMIT, offset: page * LIMIT, query },
-        })
-        .catch((err: AxiosError) => {
-          console.error(err);
-        });
-      if (!drinksFromApi) throw new Error("Could not retrieve drinks");
-      setDrinks(drinksFromApi.data || []);
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page, query]);
+  const getDrinks = useCallback(
+    async (query?: string) => {
+      try {
+        const apiQuery = query && query.length > 2 ? query : "";
+        const drinksFromApi = await axios
+          .get(`${API_URL}/recipes`, {
+            params: { limit: LIMIT, offset: page * LIMIT, query: apiQuery },
+          })
+          .catch((err: AxiosError) => {
+            console.error(err);
+          });
+        if (!drinksFromApi) throw new Error("Could not retrieve drinks");
+        setDrinks(drinksFromApi.data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [page]
+  );
 
   useEffect(() => {
     if (!selectedDrink) getDrinks();
   }, [getDrinks, selectedDrink]);
 
-  console.log({ query });
   return (
     <div>
       <header className={classes.header}>
@@ -112,7 +114,7 @@ const DrinkList = () => {
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
         <div className={classes.filters}>
-          <SearchBar query={query} setQuery={setQuery} />
+          <SearchBar getDrinks={getDrinks} />
         </div>
       </header>
       <section className={classes.drinkList}>
