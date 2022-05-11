@@ -24,11 +24,12 @@ const IngredientList = ({
   };
 
   const plural = (measurement: string): string => {
-    return (measurement = "dash" ? "dashes" : measurement + "s");
+    return measurement === "dash" ? "dashes" : measurement + "s";
   };
 
   return (
     <ul>
+      {console.log(ingredients)}
       {ingredients.map((ingredient: StructuredRecipeIngredient) => (
         <li key={ingredient.id}>{`${renderDecimalAsFraction(
           Number(ingredient.quantity)

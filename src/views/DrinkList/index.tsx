@@ -13,7 +13,7 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     margin: [30, 8, 0],
     "@media (min-width: 480px)": {
-      flexDirection: "row",
+      flex: "row",
       margin: [30, 16, 0],
     },
   },
@@ -31,21 +31,24 @@ const useStyles = createUseStyles({
   },
   drinkList: {
     display: "flex",
+    flexFlow: "row wrap",
     width: "100%",
   },
   drinkCard: {
     margin: 8,
     border: "1px solid black",
     borderRadius: 10,
-    width: "100%",
-    "@media (min-width: 480px)": {
-      width: "50%",
-    },
-    "@media (min-width: 768px)": {
-      margin: 16,
+    // boxSizing: "border-box",
+    flexBasis: "calc(100% - 18px)",
+    "@media (min-width: 512px)": {
+      flexBasis: "calc(50% - 34px)",
     },
     "@media (min-width: 1024px)": {
-      width: "33.3%",
+      flexBasis: "calc(33% - 34px)",
+    },
+
+    "@media (min-width: 768px)": {
+      margin: 16,
     },
   },
   paginator: {
@@ -93,8 +96,8 @@ const DrinkList = () => {
   }, [page]);
 
   useEffect(() => {
-    getDrinks();
-  }, [getDrinks]);
+    if (!selectedDrink) getDrinks();
+  }, [getDrinks, selectedDrink]);
 
   return (
     <div>
