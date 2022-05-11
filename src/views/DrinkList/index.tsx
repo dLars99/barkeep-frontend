@@ -6,6 +6,7 @@ import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
+import SearchBar from "./SearchBar";
 
 const useStyles = createUseStyles({
   header: {
@@ -33,6 +34,7 @@ const useStyles = createUseStyles({
     display: "flex",
     flexFlow: "row wrap",
     width: "100%",
+    justifyContent: "space-evenly",
   },
   drinkCard: {
     margin: 8,
@@ -79,21 +81,25 @@ const DrinkList = () => {
     [drinks.length]
   );
 
-  const getDrinks = useCallback(async () => {
-    try {
-      const drinksFromApi = await axios
-        .get(`${API_URL}/recipes`, {
-          params: { limit: LIMIT, offset: page * LIMIT },
-        })
-        .catch((err: AxiosError) => {
-          console.error(err);
-        });
-      if (!drinksFromApi) throw new Error("Could not retrieve drinks");
-      setDrinks(drinksFromApi.data || []);
-    } catch (err) {
-      console.error(err);
-    }
-  }, [page]);
+  const getDrinks = useCallback(
+    async (query?: string) => {
+      try {
+        const apiQuery = query && query.length > 2 ? query : "";
+        const drinksFromApi = await axios
+          .get(`${API_URL}/recipes`, {
+            params: { limit: LIMIT, offset: page * LIMIT, query: apiQuery },
+          })
+          .catch((err: AxiosError) => {
+            console.error(err);
+          });
+        if (!drinksFromApi) throw new Error("Could not retrieve drinks");
+        setDrinks(drinksFromApi.data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [page]
+  );
 
   useEffect(() => {
     if (!selectedDrink) getDrinks();
@@ -108,7 +114,9 @@ const DrinkList = () => {
           </button>
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
-        <div className={classes.filters}>{/* Search Bar */}</div>
+        <div className={classes.filters}>
+          <SearchBar getDrinks={getDrinks} />
+        </div>
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (

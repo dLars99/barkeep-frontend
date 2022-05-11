@@ -29,7 +29,6 @@ const IngredientList = ({
 
   return (
     <ul>
-      {console.log(ingredients)}
       {ingredients.map((ingredient: StructuredRecipeIngredient) => (
         <li key={ingredient.id}>{`${renderDecimalAsFraction(
           Number(ingredient.quantity)
