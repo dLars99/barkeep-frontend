@@ -17,6 +17,9 @@ const DrinkCard = ({ drink }: { drink: Drink }) => {
     <div key={drink.id} className={classes.card}>
       <h2 className={classes.drinkTitle}>{drink.name}</h2>
       <IngredientList ingredients={drink.ingredients} />
+      {drink.matches ? (
+        <p>{`${drink.matches} of ${drink.ingredients.length} ingredients`}</p>
+      ) : null}
     </div>
   );
 };

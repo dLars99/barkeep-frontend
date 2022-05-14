@@ -69,7 +69,7 @@ const useStyles = createUseStyles({
 const LIMIT = 10;
 const API_URL = process.env.REACT_APP_API_URL;
 
-const DrinkList = () => {
+const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [drinks, setDrinks] = useState<Drink[]>([]);
@@ -114,9 +114,11 @@ const DrinkList = () => {
           </button>
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
-        <div className={classes.filters}>
-          <SearchBar getDrinks={getDrinks} />
-        </div>
+        {byIngredients ? null : (
+          <div className={classes.filters}>
+            <SearchBar getDrinks={getDrinks} />
+          </div>
+        )}
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
@@ -154,6 +156,7 @@ const DrinkList = () => {
         <DrinkDetail
           drink={selectedDrink}
           setSelectedDrink={setSelectedDrink}
+          allowEdit={!byIngredients}
         />
       ) : null}
     </div>

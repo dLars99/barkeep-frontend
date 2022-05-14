@@ -63,4 +63,5 @@ export interface Drink {
   glass1: string;
   glass2: string;
   ingredients: StructuredRecipeIngredient[];
+  matches?: number;
 }
