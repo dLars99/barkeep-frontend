@@ -1,15 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { createUseStyles } from "react-jss";
 import axios, { AxiosError } from "axios";
 import { Ingredient } from "../../types";
 import Checkbox from "../../components/Checkbox";
 import Button from "../../components/Button";
-// ingredient list, submit
+
 const API_URL = process.env.REACT_APP_API_URL;
+
+const useStyles = createUseStyles({
+  ingredientList: {
+    display: "flex",
+    flexFlow: "row wrap",
+  },
+  ingredient: {
+    margin: 4,
+  },
+});
+
 const IngredientSearch = ({
   getDrinks,
 }: {
   getDrinks: (query?: Record<string, boolean>) => Promise<void>;
 }): JSX.Element | null => {
+  const classes = useStyles();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>();
   const [selectedIngredients, setSelectedIngredients] = useState<
     Record<string, boolean>
@@ -32,27 +45,32 @@ const IngredientSearch = ({
     }
   }, []);
 
-  const handleCheckbox = (e: React.FormEvent<HTMLInputElement>) => {
-    const currentSelections = selectedIngredients;
-    currentSelections[e.currentTarget.id] =
-      !currentSelections[e.currentTarget.id];
-    setSelectedIngredients(currentSelections);
-  };
+  const handleCheckbox = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      const currentSelections = selectedIngredients;
+      currentSelections[e.currentTarget.id] =
+        !currentSelections[e.currentTarget.id];
+      setSelectedIngredients(currentSelections);
+    },
+    [selectedIngredients]
+  );
 
-  // Search bar, selectors
+  // Search bar
   if (ingredientList?.length)
     return (
       <div>
-        {ingredientList.map((ingredient: Ingredient) => (
-          <div key={ingredient.id}>
-            <Checkbox
-              id={ingredient.id}
-              checked={selectedIngredients[ingredient.id]}
-              onChange={handleCheckbox}
-              label={ingredient.name}
-            />
-          </div>
-        ))}
+        <div className={classes.ingredientList}>
+          {ingredientList.map((ingredient: Ingredient) => (
+            <div key={ingredient.id} className={classes.ingredient}>
+              <Checkbox
+                id={ingredient.id}
+                checked={selectedIngredients[ingredient.id]}
+                onChange={handleCheckbox}
+                label={ingredient.name}
+              />
+            </div>
+          ))}
+        </div>
         <Button type="button" onClick={() => getDrinks(selectedIngredients)}>
           Search
         </Button>
@@ -61,4 +79,4 @@ const IngredientSearch = ({
   return null;
 };
 
-export default IngredientSearch;
+export default React.memo(IngredientSearch);
