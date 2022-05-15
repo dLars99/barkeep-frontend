@@ -29,9 +29,11 @@ const useStyles = createUseStyles({
 const DrinkDetail = ({
   drink,
   setSelectedDrink,
+  allowEdit,
 }: {
   drink: Drink;
   setSelectedDrink: React.Dispatch<React.SetStateAction<Drink | undefined>>;
+  allowEdit: boolean;
 }) => {
   const classes = useStyles();
   const [edit, setEdit] = useState<boolean>(false);
@@ -47,16 +49,18 @@ const DrinkDetail = ({
           <CreateDrink editId={drink.id} handleBack={handleClose} />
         ) : (
           <div>
-            <Button
-              id="editButton"
-              type="button"
-              onClick={(e: SyntheticEvent | undefined) => {
-                e?.stopPropagation();
-                setEdit(true);
-              }}
-            >
-              Edit
-            </Button>
+            {allowEdit ? (
+              <Button
+                id="editButton"
+                type="button"
+                onClick={(e: SyntheticEvent | undefined) => {
+                  e?.stopPropagation();
+                  setEdit(true);
+                }}
+              >
+                Edit
+              </Button>
+            ) : null}
             <h1>{drink.name}</h1>
             <h2>{drink.category}</h2>
             <IngredientList ingredients={drink.ingredients} />

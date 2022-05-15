@@ -1,12 +1,13 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
-import { Drink } from "../../types";
+import { Drink, GetIngredientsParams } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
+import IngredientSearch from "./IngredientSearch";
 
 const useStyles = createUseStyles({
   header: {
@@ -69,7 +70,7 @@ const useStyles = createUseStyles({
 const LIMIT = 10;
 const API_URL = process.env.REACT_APP_API_URL;
 
-const DrinkList = () => {
+const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [drinks, setDrinks] = useState<Drink[]>([]);
@@ -82,12 +83,22 @@ const DrinkList = () => {
   );
 
   const getDrinks = useCallback(
-    async (query?: string) => {
+    async (query?: string | Record<string, boolean>) => {
       try {
-        const apiQuery = query && query.length > 2 ? query : "";
+        const params: GetIngredientsParams = {
+          limit: LIMIT,
+          offset: page * LIMIT,
+        };
+        if (typeof query === "string") {
+          params.query = query && query.length > 2 ? query : "";
+        } else if (query) {
+          params.ingredientId = Object.keys(query).filter(
+            (key: string) => query[key]
+          );
+        }
         const drinksFromApi = await axios
           .get(`${API_URL}/recipes`, {
-            params: { limit: LIMIT, offset: page * LIMIT, query: apiQuery },
+            params,
           })
           .catch((err: AxiosError) => {
             console.error(err);
@@ -114,9 +125,13 @@ const DrinkList = () => {
           </button>
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
-        <div className={classes.filters}>
-          <SearchBar getDrinks={getDrinks} />
-        </div>
+        {byIngredients ? (
+          <IngredientSearch getDrinks={getDrinks} />
+        ) : (
+          <div className={classes.filters}>
+            <SearchBar getDrinks={getDrinks} />
+          </div>
+        )}
       </header>
       <section className={classes.drinkList}>
         {drinks.map((drink) => (
@@ -154,6 +169,7 @@ const DrinkList = () => {
         <DrinkDetail
           drink={selectedDrink}
           setSelectedDrink={setSelectedDrink}
+          allowEdit={!byIngredients}
         />
       ) : null}
     </div>
