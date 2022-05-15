@@ -8,6 +8,12 @@ import Button from "../../components/Button";
 const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = createUseStyles({
+  ingredientSelection: {
+    border: [1, "solid", "black"],
+    borderRadius: 10,
+    padding: [8, 16],
+  },
+  title: {},
   ingredientList: {
     display: "flex",
     flexFlow: "row wrap",
@@ -58,7 +64,11 @@ const IngredientSearch = ({
   // Search bar
   if (ingredientList?.length)
     return (
-      <div>
+      <div className={classes.ingredientSelection}>
+        <div className={classes.title}>
+          <h3>Select ingredients from your bar</h3>
+          <p>We'll show you drinks you can make</p>
+        </div>
         <div className={classes.ingredientList}>
           {ingredientList.map((ingredient: Ingredient) => (
             <div key={ingredient.id} className={classes.ingredient}>
