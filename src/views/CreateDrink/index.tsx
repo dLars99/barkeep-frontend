@@ -90,6 +90,7 @@ const DrinkSchema = Yup.object().shape({
   glass1: Yup.string(),
   glass2: Yup.string(),
   rating: Yup.string(),
+  video_url: Yup.string().url(),
 });
 
 const handleSubmit = async (
@@ -137,6 +138,7 @@ const handleSubmit = async (
         rating: 0,
         glass1: "",
         glass2: "",
+        video_url: "",
         ingredients: [],
       },
     });
@@ -238,6 +240,7 @@ const CreateDrink = ({
             rating: drink?.rating || 0,
             glass1: drink?.glass1 || "",
             glass2: drink?.glass2 || "",
+            video_url: drink?.video_url || "",
             ingredients: mappedIngredients(drink) ?? [],
           }}
           validationSchema={DrinkSchema}
@@ -351,6 +354,14 @@ const CreateDrink = ({
                   className={classes.formField}
                   type="text"
                   name="glass2"
+                />
+              </label>
+              <label htmlFor="video_url" className={classes.fieldLabel}>
+                Link to instructional video
+                <Field
+                  className={classes.formField}
+                  type="text"
+                  name="video_url"
                 />
               </label>
               <label htmlFor="rating" className={classes.fieldLabel}>
