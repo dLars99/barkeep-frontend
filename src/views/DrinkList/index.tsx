@@ -97,7 +97,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
           );
         }
         const drinksFromApi = await axios
-          .get(`${API_URL}/recipes`, {
+          .get(`${API_URL}/drinks`, {
             params,
           })
           .catch((err: AxiosError) => {

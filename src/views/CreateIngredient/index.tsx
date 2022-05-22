@@ -75,7 +75,7 @@ const CreateIngredient = (): JSX.Element => {
       {!loading ? (
         <Formik
           initialValues={{
-            name: "",
+            ingredient_name: "",
             ingredient_type_id: typeList?.[0]?.id,
             suggestions: "",
           }}
@@ -83,7 +83,7 @@ const CreateIngredient = (): JSX.Element => {
             values: IngredientFormValues
           ): FormikErrors<IngredientFormValues> => {
             const errors: FormikErrors<IngredientFormValues> = {};
-            if (!values.name) errors.name = "Required";
+            if (!values.ingredient_name) errors.ingredient_name = "Required";
             return errors;
           }}
           onSubmit={async (values, { resetForm }): Promise<void> => {
@@ -94,7 +94,7 @@ const CreateIngredient = (): JSX.Element => {
             if (submitResponse?.status === 201) {
               resetForm({
                 values: {
-                  name: "",
+                  ingredient_name: "",
                   ingredient_type_id: typeList?.[0]?.id,
                   suggestions: "",
                 },
@@ -109,10 +109,10 @@ const CreateIngredient = (): JSX.Element => {
             <Field
               className={classes.formField}
               type="text"
-              name="name"
+              name="ingredient_name"
               label="Name"
             />
-            <ErrorMessage name="name" component="div" />
+            <ErrorMessage name="ingredient_name" component="div" />
             <p className={classes.fieldLabel}>Type</p>
             <Field
               className={classes.formField}
@@ -123,7 +123,7 @@ const CreateIngredient = (): JSX.Element => {
               {typeList?.length
                 ? typeList.map((type) => (
                     <option key={type.id} value={type.id}>
-                      {type.name}
+                      {type.ingredient_type_name}
                     </option>
                   ))
                 : "Could not retrieve type list"}

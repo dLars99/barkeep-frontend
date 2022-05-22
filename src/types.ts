@@ -1,17 +1,17 @@
 export interface IngredientType {
   id: string;
-  name: string;
+  ingredient_type_name: string;
 }
 
 export interface Ingredient {
   id: string;
-  name: string;
+  ingredient_name: string;
   ingredient_type_id: string;
   suggestions?: string;
 }
 
 export interface IngredientFormValues {
-  name: string;
+  ingredient_name: string;
   ingredient_type_id: string;
   suggestions: string;
 }
@@ -23,30 +23,30 @@ export interface GetIngredientsParams {
   ingredientId?: string[];
 }
 
-export interface RecipeCategory {
+export interface DrinkCategory {
   id: string;
-  name: string;
+  category_name: string;
 }
 
-export interface RecipeIngredient {
+export interface DrinkIngredientModel {
   id: string;
   qty?: number;
   qtyFraction?: string;
   qtyType?: string;
 }
 
-export interface RecipeFormValues {
+export interface DrinkFormValues {
   id: number | undefined;
-  name: string;
+  drink_name: string;
   category_id: string;
   instructions: string;
   rating: number;
   glass1: string;
   glass2: string;
-  ingredients: RecipeIngredient[];
+  ingredients: DrinkIngredientModel[];
 }
 
-export interface RecipeFormResetValues extends RecipeFormValues {
+export interface DrinkFormResetValues extends DrinkFormValues {
   ingredients: never[];
 }
 export interface QuantityFraction {
@@ -54,21 +54,21 @@ export interface QuantityFraction {
   value: number;
 }
 
-export interface StructuredRecipeIngredient {
+export interface StructuredDrinkIngredient {
   id: number;
-  name: string;
+  ingredient_name: string;
   quantity: number;
   quantity_type: string;
 }
 export interface Drink {
   id: number;
-  name: string;
+  drink_name: string;
   category_id?: string;
   category: string;
   instructions: string;
   rating: number;
   glass1: string;
   glass2: string;
-  ingredients: StructuredRecipeIngredient[];
+  ingredients: StructuredDrinkIngredient[];
   matches?: number;
 }
