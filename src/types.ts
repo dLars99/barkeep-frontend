@@ -43,6 +43,7 @@ export interface DrinkFormValues {
   rating: number;
   glass1: string;
   glass2: string;
+  video_url: string;
   ingredients: DrinkIngredientModel[];
 }
 
@@ -69,6 +70,7 @@ export interface Drink {
   rating: number;
   glass1: string;
   glass2: string;
+  video_url: string;
   ingredients: StructuredDrinkIngredient[];
   matches?: number;
 }
