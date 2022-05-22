@@ -73,6 +73,11 @@ const DrinkDetail = ({
                 {drink.glass2 ? <span>{`, ${drink.glass2}`}</span> : null}
               </p>
             ) : null}
+            {drink.video_url ? (
+              <a href={drink.video_url} target="_blank" rel="noreferrer">
+                <p>{`Watch a video about making a ${drink.drink_name}`}</p>
+              </a>
+            ) : null}
             {Number(drink.rating) ? (
               <p>
                 Rating:
