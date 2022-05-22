@@ -15,12 +15,12 @@ import {
 import * as Yup from "yup";
 import { createUseStyles } from "react-jss";
 import {
-  RecipeCategory,
-  RecipeFormValues,
-  RecipeFormResetValues,
+  DrinkCategory,
+  DrinkFormValues,
+  DrinkFormResetValues,
   Ingredient,
-  RecipeIngredient,
-  StructuredRecipeIngredient,
+  DrinkIngredientModel,
+  StructuredDrinkIngredient,
   Drink,
 } from "../../types";
 import Button from "../../components/Button";
@@ -70,7 +70,7 @@ const useStyles = createUseStyles({
 });
 
 const DrinkSchema = Yup.object().shape({
-  name: Yup.string().trim().required("Required"),
+  drink_name: Yup.string().trim().required("Required"),
   ingredients: Yup.array()
     .of(
       Yup.object().shape({
@@ -95,16 +95,16 @@ const DrinkSchema = Yup.object().shape({
 const handleSubmit = async (
   editId: number | undefined,
   values: FormikValues,
-  categoryList: RecipeCategory[],
+  categoryList: DrinkCategory[],
   resetForm: (
-    nextState?: Partial<FormikState<RecipeFormResetValues>> | undefined
+    nextState?: Partial<FormikState<DrinkFormResetValues>> | undefined
   ) => void,
   handleBack: (() => void) | undefined
 ): Promise<void> => {
   // Assemble quantities
   const preppedValues = {
     ...values,
-    ingredients: values.ingredients.map((ingredient: RecipeIngredient) => {
+    ingredients: values.ingredients.map((ingredient: DrinkIngredientModel) => {
       const { id, qty, qtyFraction, qtyType } = ingredient;
       return {
         ingredient_id: id,
@@ -116,11 +116,11 @@ const handleSubmit = async (
   let submitResponse: void | AxiosResponse;
   if (editId) {
     submitResponse = await axios
-      .put(`${API_URL}/recipes/${values.id}`, preppedValues)
+      .put(`${API_URL}/drinks/${values.id}`, preppedValues)
       .catch((err: AxiosError) => console.error(err));
   } else {
     submitResponse = await axios
-      .post(`${API_URL}/recipes`, preppedValues)
+      .post(`${API_URL}/drinks`, preppedValues)
       .catch((err: AxiosError) => console.error(err));
   }
   if (
@@ -131,7 +131,7 @@ const handleSubmit = async (
     resetForm({
       values: {
         id: undefined,
-        name: "",
+        drink_name: "",
         category_id: categoryList?.[0]?.id,
         instructions: "",
         rating: 0,
@@ -142,7 +142,7 @@ const handleSubmit = async (
     });
     if (handleBack) handleBack();
   } else {
-    console.error("Error on recipe save");
+    console.error("Error on drink save");
   }
 };
 
@@ -157,7 +157,7 @@ const CreateDrink = ({
   const classes = useStyles();
   const [drink, setDrink] = useState<Drink>();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
-  const [categoryList, setCategoryList] = useState<RecipeCategory[]>([]);
+  const [categoryList, setCategoryList] = useState<DrinkCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   // Initial load
@@ -166,7 +166,7 @@ const CreateDrink = ({
       (async (): Promise<void> => {
         if (editId) {
           const drink = await axios
-            .get<Drink>(`${API_URL}/recipes`, {
+            .get<Drink>(`${API_URL}/drinks`, {
               params: {
                 id: editId,
               },
@@ -183,7 +183,7 @@ const CreateDrink = ({
         setIngredientList(ingredients.data || []);
 
         const categories = await axios
-          .get<RecipeCategory[]>(`${API_URL}/categories`)
+          .get<DrinkCategory[]>(`${API_URL}/categories`)
           .catch((err: AxiosError) => console.error(err));
         if (!categories)
           throw new Error("Could not retrieve ingredient categories from API!");
@@ -198,15 +198,15 @@ const CreateDrink = ({
 
   const mappedIngredients = (
     drink: Drink | undefined
-  ): RecipeIngredient[] | undefined => {
+  ): DrinkIngredientModel[] | undefined => {
     if (!drink) return;
     const formIngredients = drink.ingredients?.map(
-      (ingredient: StructuredRecipeIngredient) => {
+      (ingredient: StructuredDrinkIngredient) => {
         const qty = Math.floor(ingredient.quantity);
         const qtyFraction = String(ingredient.quantity - qty);
         return {
           id: String(ingredient.id),
-          name: ingredient.name,
+          name: ingredient.ingredient_name,
           qty,
           qtyFraction,
           qtyType: ingredient.quantity_type,
@@ -232,7 +232,7 @@ const CreateDrink = ({
           enableReinitialize
           initialValues={{
             id: drink?.id,
-            name: drink?.name || "",
+            drink_name: drink?.drink_name || "",
             category_id: drink?.category_id || categoryList?.[0]?.id,
             instructions: drink?.instructions || "",
             rating: drink?.rating || 0,
@@ -245,18 +245,18 @@ const CreateDrink = ({
             handleSubmit(editId, values, categoryList, resetForm, handleBack)
           }
         >
-          {({ values, errors }: FormikProps<RecipeFormValues>): JSX.Element => (
+          {({ values, errors }: FormikProps<DrinkFormValues>): JSX.Element => (
             <Form className={classes.formRoot}>
-              <label htmlFor="name" className={classes.fieldLabel}>
+              <label htmlFor="drink_name" className={classes.fieldLabel}>
                 Name
                 <Field
                   className={classes.formField}
                   type="text"
-                  name="name"
+                  name="drink_name"
                   label="Name"
                 />
                 <ErrorMessage
-                  name="name"
+                  name="drink_name"
                   component="div"
                   className={classes.errorMessage}
                 />
@@ -316,9 +316,9 @@ const CreateDrink = ({
                   label="Type"
                 >
                   {categoryList?.length
-                    ? categoryList.map((category: RecipeCategory) => (
+                    ? categoryList.map((category: DrinkCategory) => (
                         <option key={category.id} value={category.id}>
-                          {category.name}
+                          {category.category_name}
                         </option>
                       ))
                     : "Could not retrieve category list"}

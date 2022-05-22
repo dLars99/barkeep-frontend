@@ -15,7 +15,7 @@ const DrinkCard = ({ drink }: { drink: Drink }) => {
   const classes = useStyles();
   return (
     <div key={drink.id} className={classes.card}>
-      <h2 className={classes.drinkTitle}>{drink.name}</h2>
+      <h2 className={classes.drinkTitle}>{drink.drink_name}</h2>
       <IngredientList ingredients={drink.ingredients} />
       {drink.matches ? (
         <p>{`${drink.matches} of ${drink.ingredients.length} ingredients`}</p>

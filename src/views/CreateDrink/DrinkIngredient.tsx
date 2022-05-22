@@ -97,7 +97,7 @@ const DrinkIngredient = ({
                 )
                 .map((ingredient: Ingredient, index: number) => (
                   <option key={`ingredient-${index}`} value={ingredient.id}>
-                    {ingredient.name}
+                    {ingredient.ingredient_name}
                   </option>
                 ))
             : "Could not retrieve ingredient list"}

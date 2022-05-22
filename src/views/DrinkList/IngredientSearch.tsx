@@ -76,7 +76,7 @@ const IngredientSearch = ({
                 id={ingredient.id}
                 checked={selectedIngredients[ingredient.id]}
                 onChange={handleCheckbox}
-                label={ingredient.name}
+                label={ingredient.ingredient_name}
               />
             </div>
           ))}

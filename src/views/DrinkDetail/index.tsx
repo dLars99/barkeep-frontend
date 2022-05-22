@@ -61,7 +61,7 @@ const DrinkDetail = ({
                 Edit
               </Button>
             ) : null}
-            <h1>{drink.name}</h1>
+            <h1>{drink.drink_name}</h1>
             <h2>{drink.category}</h2>
             <IngredientList ingredients={drink.ingredients} />
             <h3>Instructions</h3>

@@ -1,9 +1,9 @@
-import { StructuredRecipeIngredient } from "../../types";
+import { StructuredDrinkIngredient } from "../../types";
 
 const IngredientList = ({
   ingredients,
 }: {
-  ingredients: StructuredRecipeIngredient[];
+  ingredients: StructuredDrinkIngredient[];
 }) => {
   const renderDecimalAsFraction = (num: number): string => {
     const whole = Math.floor(num);
@@ -29,14 +29,14 @@ const IngredientList = ({
 
   return (
     <ul>
-      {ingredients.map((ingredient: StructuredRecipeIngredient) => (
+      {ingredients.map((ingredient: StructuredDrinkIngredient) => (
         <li key={ingredient.id}>{`${renderDecimalAsFraction(
           Number(ingredient.quantity)
         )} ${
           ingredient.quantity > 1
             ? plural(ingredient.quantity_type)
             : ingredient.quantity_type
-        } ${ingredient.name}`}</li>
+        } ${ingredient.ingredient_name}`}</li>
       ))}
     </ul>
   );
