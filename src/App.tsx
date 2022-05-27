@@ -11,6 +11,9 @@ import DrinkList from "./views/DrinkList";
 
 const useStyles = createUseStyles({
   mainApp: {
+    height: "100vh",
+    width: "100vw",
+    overflow: "auto",
     backgroundImage: `url(${TikiBar})`,
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",

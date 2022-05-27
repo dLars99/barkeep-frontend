@@ -14,6 +14,8 @@ const useStyles = createUseStyles({
     display: "flex",
     flexDirection: "column",
     margin: [30, 8, 0],
+    fontFamily: "'Reggae One', cursive",
+    color: "#F2E30C",
     "@media (min-width: 480px)": {
       flex: "row",
       margin: [30, 16, 0],
@@ -22,11 +24,13 @@ const useStyles = createUseStyles({
   backButton: {
     background: "transparent",
     border: "none",
+    color: "#F2E30C",
+    fontFamily: "'Reggae One', cursive",
   },
   title: {
     position: "relative",
     flex: 1,
-    textAlign: "center",
+    margin: [8, 8, 16],
   },
   filters: {
     flex: 2,
@@ -39,9 +43,12 @@ const useStyles = createUseStyles({
   },
   drinkCard: {
     margin: 8,
-    border: "1px solid black",
     borderRadius: 10,
-    // boxSizing: "border-box",
+    backgroundColor: "rgba(252, 223, 135, 0.8)",
+    color: "#0D0000",
+    boxShadow: ["inset", 0, 0, 15, "#F99938"],
+    fontFamily: "'Catamaran', sans-serif",
+    lineHeight: 1.4,
     flexBasis: "calc(100% - 18px)",
     "@media (min-width: 512px)": {
       flexBasis: "calc(50% - 34px)",
@@ -49,7 +56,6 @@ const useStyles = createUseStyles({
     "@media (min-width: 1024px)": {
       flexBasis: "calc(33% - 34px)",
     },
-
     "@media (min-width: 768px)": {
       margin: 16,
     },

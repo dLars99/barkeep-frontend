@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
+  searchBarRoot: {
+    fontFamily: "'Catamaran', sans-serif",
+  },
   label: {
     padding: 8,
     display: "flex",
@@ -15,6 +18,8 @@ const useStyles = createUseStyles({
     borderRadius: 10,
     padding: [2, "1rem"],
     fontSize: 16,
+    backgroundColor: "rgba(252, 240, 180, 0.8)",
+    border: "none",
   },
 });
 
@@ -37,7 +42,7 @@ const SearchBar = ({
     }, 500);
   };
   return (
-    <div>
+    <div className={classes.searchBarRoot}>
       <label className={classes.label}>
         Search
         <input
