@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { Drink, GetIngredientsParams } from "../../types";
 import { createUseStyles } from "react-jss";
@@ -8,6 +7,7 @@ import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
 import IngredientSearch from "./IngredientSearch";
+import BackButton from "../../components/BackButton";
 
 const useStyles = createUseStyles({
   header: {
@@ -17,20 +17,18 @@ const useStyles = createUseStyles({
     fontFamily: "'Reggae One', cursive",
     color: "#F2E30C",
     "@media (min-width: 480px)": {
-      flex: "row",
       margin: [30, 16, 0],
     },
   },
-  backButton: {
-    background: "transparent",
-    border: "none",
-    color: "#F2E30C",
-    fontFamily: "'Reggae One', cursive",
+  titleLine: {
+    display: "flex",
+    alignItems: "center",
+    margin: [4, 0, 4],
   },
   title: {
     position: "relative",
     flex: 1,
-    margin: [8, 8, 16],
+    marginLeft: 8,
   },
   filters: {
     flex: 2,
@@ -85,7 +83,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [page, setPage] = useState<number>(1);
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
@@ -132,10 +129,8 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   return (
     <div>
       <header className={classes.header}>
-        <div>
-          <button className={classes.backButton} onClick={() => navigate(-1)}>
-            {"<< Back"}
-          </button>
+        <div className={classes.titleLine}>
+          <BackButton />
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
         {byIngredients ? (
