@@ -4,6 +4,7 @@ import CreateDrink from "../CreateDrink";
 import Button from "../../components/Button";
 import { Drink } from "../../types";
 import IngredientList from "../DrinkList/IngredientList";
+import { RiEdit2Line, RiCloseLine } from "react-icons/ri";
 
 const useStyles = createUseStyles({
   overlay: {
@@ -16,6 +17,9 @@ const useStyles = createUseStyles({
     zIndex: 1,
   },
   detailCard: {
+    backgroundColor: "rgba(252, 223, 135, 0.9)",
+    color: "#0D0000",
+    boxShadow: ["inset", 0, 0, 15, "#F99938"],
     margin: [30, "auto"],
     padding: [12, 20],
     width: "50%",
@@ -23,6 +27,16 @@ const useStyles = createUseStyles({
     borderRadius: 10,
     background: "#fff",
     zIndex: 2,
+  },
+  buttonWrapper: {
+    display: "flex",
+    justifyContent: "flex-end",
+  },
+  editButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    fontSize: 22,
+    margin: [0, 4],
   },
 });
 
@@ -50,18 +64,24 @@ const DrinkDetail = ({
         ) : (
           <div>
             {allowEdit ? (
-              <Button
-                id="editButton"
-                type="button"
-                onClick={(e: SyntheticEvent | undefined) => {
-                  e?.stopPropagation();
-                  setEdit(true);
-                }}
-              >
-                Edit
-              </Button>
+              <div className={classes.buttonWrapper}>
+                <Button
+                  id="editButton"
+                  type="button"
+                  className={classes.editButton}
+                  onClick={(e: SyntheticEvent | undefined) => {
+                    e?.stopPropagation();
+                    setEdit(true);
+                  }}
+                >
+                  <RiEdit2Line />
+                </Button>
+                <div className={classes.editButton}>
+                  <RiCloseLine />
+                </div>
+              </div>
             ) : null}
-            <h1>{drink.drink_name}</h1>
+            <h1 style={{ marginTop: 0 }}>{drink.drink_name}</h1>
             <h2>{drink.category}</h2>
             <IngredientList ingredients={drink.ingredients} />
             <h3>Instructions</h3>

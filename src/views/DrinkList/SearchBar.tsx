@@ -19,7 +19,8 @@ const useStyles = createUseStyles({
     padding: [2, "1rem"],
     fontSize: 16,
     backgroundColor: "rgba(252, 240, 180, 0.8)",
-    border: "none",
+    color: "#0D0000",
+    border: 0,
   },
 });
 

@@ -44,7 +44,7 @@ const useStyles = createUseStyles({
   drinkCard: {
     margin: 8,
     borderRadius: 10,
-    backgroundColor: "rgba(252, 223, 135, 0.8)",
+    backgroundColor: "rgba(252, 223, 135, 0.9)",
     color: "#0D0000",
     boxShadow: ["inset", 0, 0, 15, "#F99938"],
     fontFamily: "'Catamaran', sans-serif",
@@ -63,13 +63,20 @@ const useStyles = createUseStyles({
   paginator: {
     display: "flex",
     justifyContent: "flex-end",
-    paddingRight: 8,
+    padding: [0, 8, 4, 0],
+    boxSizing: "border-box",
+    color: "#F2E30C",
     "@media (min-width: 768px)": {
       paddingRight: 16,
     },
   },
   pageButton: {
     margin: [0, 4],
+  },
+  pageDisplay: {
+    padding: 6,
+    borderRadius: 10,
+    backgroundColor: "rgba(13, 0, 0, 0.6)",
   },
 });
 
@@ -160,7 +167,9 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
             &minus;
           </Button>
         ) : null}
-        <div>{`Page ${page} of ${totalPages}`}</div>
+        <div
+          className={classes.pageDisplay}
+        >{`Page ${page} of ${totalPages}`}</div>
         {totalPages > 1 ? (
           <Button
             disabled={page === totalPages}
