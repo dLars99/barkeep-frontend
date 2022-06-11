@@ -1,14 +1,10 @@
 import { createUseStyles } from "react-jss";
 import Button from "../../components/Button";
-import TikiBar from "../../assets/images/tikibar.jpg";
 
 const useStyles = createUseStyles({
   root: {
     padding: [0, 10],
     height: "100vh",
-    backgroundImage: `url(${TikiBar})`,
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "cover",
     boxSizing: "border-box",
     paddingTop: 6,
   },

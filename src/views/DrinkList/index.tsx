@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import axios, { AxiosError } from "axios";
 import { Drink, GetIngredientsParams } from "../../types";
 import { createUseStyles } from "react-jss";
@@ -8,25 +7,28 @@ import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
 import IngredientSearch from "./IngredientSearch";
+import BackButton from "../../components/BackButton";
 
 const useStyles = createUseStyles({
   header: {
     display: "flex",
     flexDirection: "column",
     margin: [30, 8, 0],
+    fontFamily: "'Reggae One', cursive",
+    color: "#F2E30C",
     "@media (min-width: 480px)": {
-      flex: "row",
       margin: [30, 16, 0],
     },
   },
-  backButton: {
-    background: "transparent",
-    border: "none",
+  titleLine: {
+    display: "flex",
+    alignItems: "center",
+    margin: [4, 0, 4],
   },
   title: {
     position: "relative",
     flex: 1,
-    textAlign: "center",
+    marginLeft: 8,
   },
   filters: {
     flex: 2,
@@ -39,9 +41,12 @@ const useStyles = createUseStyles({
   },
   drinkCard: {
     margin: 8,
-    border: "1px solid black",
     borderRadius: 10,
-    // boxSizing: "border-box",
+    backgroundColor: "rgba(252, 223, 135, 0.9)",
+    color: "#0D0000",
+    boxShadow: ["inset", 0, 0, 15, "#F99938"],
+    fontFamily: "'Catamaran', sans-serif",
+    lineHeight: 1.4,
     flexBasis: "calc(100% - 18px)",
     "@media (min-width: 512px)": {
       flexBasis: "calc(50% - 34px)",
@@ -49,7 +54,6 @@ const useStyles = createUseStyles({
     "@media (min-width: 1024px)": {
       flexBasis: "calc(33% - 34px)",
     },
-
     "@media (min-width: 768px)": {
       margin: 16,
     },
@@ -57,13 +61,20 @@ const useStyles = createUseStyles({
   paginator: {
     display: "flex",
     justifyContent: "flex-end",
-    paddingRight: 8,
+    padding: [0, 8, 4, 0],
+    boxSizing: "border-box",
+    color: "#F2E30C",
     "@media (min-width: 768px)": {
       paddingRight: 16,
     },
   },
   pageButton: {
     margin: [0, 4],
+  },
+  pageDisplay: {
+    padding: 6,
+    borderRadius: 10,
+    backgroundColor: "rgba(13, 0, 0, 0.6)",
   },
 });
 
@@ -72,7 +83,6 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const [drinks, setDrinks] = useState<Drink[]>([]);
   const [page, setPage] = useState<number>(1);
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
@@ -119,10 +129,8 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   return (
     <div>
       <header className={classes.header}>
-        <div>
-          <button className={classes.backButton} onClick={() => navigate(-1)}>
-            {"<< Back"}
-          </button>
+        <div className={classes.titleLine}>
+          <BackButton />
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
         {byIngredients ? (
@@ -154,7 +162,9 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
             &minus;
           </Button>
         ) : null}
-        <div>{`Page ${page} of ${totalPages}`}</div>
+        <div
+          className={classes.pageDisplay}
+        >{`Page ${page} of ${totalPages}`}</div>
         {totalPages > 1 ? (
           <Button
             disabled={page === totalPages}
