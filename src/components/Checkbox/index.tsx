@@ -1,19 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Checkbox = ({
   id,
   label,
-  checked,
   onChange,
 }: {
   id: string;
   label: string;
-  checked: boolean;
   onChange: (e: React.FormEvent<HTMLInputElement>) => void;
 }) => {
+  const [checked, setChecked] = useState<boolean>(false);
+  const handleChange = (e: React.FormEvent<HTMLInputElement>) => {
+    setChecked(!checked);
+    onChange(e);
+  };
   return (
     <label>
-      <input type="checkbox" id={id} checked={checked} onChange={onChange} />
+      <input
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={handleChange}
+      />
       {label}
     </label>
   );

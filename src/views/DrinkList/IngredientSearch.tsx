@@ -78,16 +78,12 @@ const IngredientSearch = ({
     }
   }, []);
 
-  const handleCheckbox = useCallback(
-    (e: React.FormEvent<HTMLInputElement>) => {
-      const currentSelections = selectedIngredients;
-      currentSelections[e.currentTarget.id] =
-        !currentSelections[e.currentTarget.id];
-      setSelectedIngredients(currentSelections);
-    },
-    [selectedIngredients]
-  );
-
+  const handleCheckbox = (e: React.FormEvent<HTMLInputElement>) => {
+    const currentSelections = selectedIngredients;
+    currentSelections[e.currentTarget.id] =
+      !currentSelections[e.currentTarget.id];
+    setSelectedIngredients(currentSelections);
+  };
   // Search bar
   if (ingredientList?.length)
     return (
@@ -101,7 +97,6 @@ const IngredientSearch = ({
             <div key={ingredient.id} className={classes.ingredient}>
               <Checkbox
                 id={ingredient.id}
-                checked={selectedIngredients[ingredient.id]}
                 onChange={handleCheckbox}
                 label={ingredient.ingredient_name}
               />
