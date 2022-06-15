@@ -63,8 +63,8 @@ const DrinkDetail = ({
           <CreateDrink editId={drink.id} handleBack={handleClose} />
         ) : (
           <div>
-            {allowEdit ? (
-              <div className={classes.buttonWrapper}>
+            <div className={classes.buttonWrapper}>
+              {allowEdit ? (
                 <Button
                   id="editButton"
                   type="button"
@@ -76,11 +76,11 @@ const DrinkDetail = ({
                 >
                   <RiEdit2Line />
                 </Button>
-                <div className={classes.editButton}>
-                  <RiCloseLine />
-                </div>
+              ) : null}
+              <div className={classes.editButton}>
+                <RiCloseLine />
               </div>
-            ) : null}
+            </div>
             <h1 style={{ marginTop: 0 }}>{drink.drink_name}</h1>
             <h2>{drink.category}</h2>
             <IngredientList ingredients={drink.ingredients} />

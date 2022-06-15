@@ -40,6 +40,8 @@ const useStyles = createUseStyles({
     justifyContent: "space-evenly",
   },
   drinkCard: {
+    position: "relative",
+    display: "flex",
     margin: 8,
     borderRadius: 10,
     backgroundColor: "rgba(252, 223, 135, 0.9)",

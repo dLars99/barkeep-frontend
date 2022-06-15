@@ -12,6 +12,11 @@ const useStyles = createUseStyles({
     border: [1, "solid", "black"],
     borderRadius: 10,
     padding: [8, 16],
+    backgroundColor: "rgba(252, 223, 135, 0.9)",
+    color: "#0D0000",
+    boxShadow: ["inset", 0, 0, 15, "#F99938"],
+    fontFamily: "'Catamaran', sans-serif",
+    lineHeight: 1.4,
   },
   title: {},
   ingredientList: {
