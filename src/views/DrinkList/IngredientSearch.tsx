@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import axios, { AxiosError } from "axios";
 import { BiSearchAlt } from "react-icons/bi";
