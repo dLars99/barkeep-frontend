@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import axios, { AxiosError } from "axios";
+import { BiSearchAlt } from "react-icons/bi";
 import { Ingredient } from "../../types";
 import Checkbox from "../../components/Checkbox";
 import Button from "../../components/Button";
@@ -18,13 +19,34 @@ const useStyles = createUseStyles({
     fontFamily: "'Catamaran', sans-serif",
     lineHeight: 1.4,
   },
-  title: {},
+  title: {
+    "& h3": {
+      margin: [".5rem", 0],
+    },
+    "& p": {
+      margin: [0, 0, ".25rem"],
+    },
+  },
   ingredientList: {
     display: "flex",
     flexFlow: "row wrap",
   },
   ingredient: {
     margin: 4,
+  },
+  searchButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: 7,
+    fontSize: 16,
+    margin: [0, 4],
+    padding: [4, 8],
+    boxShadow: ["inset", 0, 0, 5, "#F99938"],
+    display: "flex",
+    alignItems: "center",
+  },
+  searchIcon: {
+    fontSize: 22,
   },
 });
 
@@ -86,7 +108,12 @@ const IngredientSearch = ({
             </div>
           ))}
         </div>
-        <Button type="button" onClick={() => getDrinks(selectedIngredients)}>
+        <Button
+          className={classes.searchButton}
+          type="button"
+          onClick={() => getDrinks(selectedIngredients)}
+        >
+          <BiSearchAlt className={classes.searchIcon} />
           Search
         </Button>
       </div>
