@@ -60,6 +60,7 @@ const IngredientSearch = ({
   const [selectedIngredients, setSelectedIngredients] = useState<
     Record<string, boolean>
   >({});
+  const [changed, setChanged] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -83,6 +84,12 @@ const IngredientSearch = ({
     currentSelections[e.currentTarget.id] =
       !currentSelections[e.currentTarget.id];
     setSelectedIngredients(currentSelections);
+    setChanged(true);
+  };
+
+  const handleSearch = () => {
+    getDrinks(selectedIngredients);
+    setChanged(false);
   };
   // Search bar
   if (ingredientList?.length)
@@ -106,7 +113,8 @@ const IngredientSearch = ({
         <Button
           className={classes.searchButton}
           type="button"
-          onClick={() => getDrinks(selectedIngredients)}
+          disabled={!changed}
+          onClick={handleSearch}
         >
           <BiSearchAlt className={classes.searchIcon} />
           Search
