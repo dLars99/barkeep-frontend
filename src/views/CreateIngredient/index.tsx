@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { Formik, Form, Field, ErrorMessage, FormikErrors } from "formik";
+import {
+  Formik,
+  Form,
+  Field,
+  ErrorMessage,
+  FormikErrors,
+  FormikProps,
+} from "formik";
 import { createUseStyles } from "react-jss";
 import { IngredientType, IngredientFormValues } from "../../types";
 import Button from "../../components/Button";
@@ -61,6 +68,17 @@ const useStyles = createUseStyles({
     color: "#d93d1a",
     alignSelf: "flex-start",
     paddingLeft: "0.5rem",
+  },
+  submitButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: 7,
+    fontSize: 16,
+    margin: [0, 4],
+    padding: ["0.5rem", "1rem"],
+    boxShadow: ["inset", 0, 0, 5, "#F99938"],
+    display: "flex",
+    alignItems: "center",
   },
 });
 
@@ -123,55 +141,66 @@ const CreateIngredient = (): JSX.Element => {
             }
           }}
         >
-          <Form className={classes.formRoot}>
-            <label htmlFor="ingredient_name" className={classes.fieldLabel}>
-              Name
-            </label>
-            <Field
-              className={classes.formField}
-              type="text"
-              name="ingredient_name"
-              label="Name"
-            />
-            <ErrorMessage
-              className={classes.formError}
-              name="ingredient_name"
-              component="div"
-            />
-            <label htmlFor="ingredient_type_id" className={classes.fieldLabel}>
-              Type
-            </label>
-            <Field
-              className={classes.formField}
-              as="select"
-              name="ingredient_type_id"
-              label="Type"
-            >
-              {typeList?.length
-                ? typeList.map((type) => (
-                    <option key={type.id} value={type.id}>
-                      {type.ingredient_type_name}
-                    </option>
-                  ))
-                : "Could not retrieve type list"}
-            </Field>
-            <ErrorMessage
-              className={classes.formError}
-              name="ingredient_type_id"
-              component="div"
-            />
-            <label htmlFor="suggestions" className={classes.fieldLabel}>
-              Suggestions
-            </label>
-            <Field
-              className={classes.formField}
-              type="textarea"
-              name="suggestions"
-              label="Suggestions"
-              placeholder="Suggest some brands or items"
-            />
-            <Button type="submit">Submit</Button>
-          </Form>
+          {({ isValid }: FormikProps<IngredientFormValues>): JSX.Element => (
+            <Form className={classes.formRoot}>
+              <label htmlFor="ingredient_name" className={classes.fieldLabel}>
+                Name
+              </label>
+              <Field
+                className={classes.formField}
+                type="text"
+                name="ingredient_name"
+                label="Name"
+              />
+              <ErrorMessage
+                className={classes.formError}
+                name="ingredient_name"
+                component="div"
+              />
+              <label
+                htmlFor="ingredient_type_id"
+                className={classes.fieldLabel}
+              >
+                Type
+              </label>
+              <Field
+                className={classes.formField}
+                as="select"
+                name="ingredient_type_id"
+                label="Type"
+              >
+                {typeList?.length
+                  ? typeList.map((type) => (
+                      <option key={type.id} value={type.id}>
+                        {type.ingredient_type_name}
+                      </option>
+                    ))
+                  : "Could not retrieve type list"}
+              </Field>
+              <ErrorMessage
+                className={classes.formError}
+                name="ingredient_type_id"
+                component="div"
+              />
+              <label htmlFor="suggestions" className={classes.fieldLabel}>
+                Suggestions
+              </label>
+              <Field
+                className={classes.formField}
+                type="textarea"
+                name="suggestions"
+                label="Suggestions"
+                placeholder="Suggest some brands or items"
+              />
+              <Button
+                type="submit"
+                className={classes.submitButton}
+                disabled={!isValid}
+              >
+                Submit
+              </Button>
+            </Form>
+          )}
         </Formik>
       ) : null}
     </div>
