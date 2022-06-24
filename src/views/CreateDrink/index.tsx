@@ -102,6 +102,7 @@ const useStyles = createUseStyles({
     boxShadow: ["inset", 0, 0, 5, "#F99938"],
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 
@@ -126,7 +127,7 @@ const DrinkSchema = Yup.object().shape({
   glass1: Yup.string(),
   glass2: Yup.string(),
   rating: Yup.string(),
-  video_url: Yup.string().url(),
+  video_url: Yup.string().url("Must be a valid url"),
 });
 
 const handleSubmit = async (
@@ -317,6 +318,7 @@ const CreateDrink = ({
                       ) : (
                         <Button
                           type="button"
+                          className={classes.submitButton}
                           onClick={() =>
                             renderProps.push({
                               id: ingredientList?.[0]?.id,
@@ -393,6 +395,13 @@ const CreateDrink = ({
                   type="text"
                   name="video_url"
                 />
+                {typeof errors.video_url === "string" ? (
+                  <ErrorMessage
+                    name="video_url"
+                    component="div"
+                    className={classes.errorMessage}
+                  />
+                ) : null}
               </label>
               <label htmlFor="rating" className={classes.fieldLabel}>
                 Rating
@@ -400,6 +409,8 @@ const CreateDrink = ({
                   className={classes.formField}
                   type="number"
                   name="rating"
+                  max={5}
+                  min={0}
                 />
               </label>
               <Button className={classes.submitButton} type="submit">

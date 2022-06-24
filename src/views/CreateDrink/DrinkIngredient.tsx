@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
     margin: [10, 0, 5],
     height: "2rem",
     borderRadius: 10,
-    padding: [2, "1rem"],
+    padding: [2, "0.25rem", 2, "0.75rem"],
     fontSize: 16,
     backgroundColor: "rgba(252, 240, 180, 0.8)",
     color: "#0D0000",
@@ -197,7 +197,7 @@ const DrinkIngredient = ({
             qtyType: "",
           });
         }}
-        className={`${classes.button}`}
+        className={classes.button}
       >
         <MdAddCircleOutline />
       </Button>
