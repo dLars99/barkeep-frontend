@@ -3,6 +3,7 @@ import { createUseStyles } from "react-jss";
 import Button from "../../components/Button";
 import { Ingredient, QuantityFraction } from "../../types";
 import { fractions, quantityTypes } from "../../helpers/lists";
+import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 
 const useStyles = createUseStyles({
   formField: {
@@ -37,7 +38,7 @@ const useStyles = createUseStyles({
   quantityFractions: {
     flex: 2,
     composes: "$fieldLabel",
-    color: "#fff",
+    color: "transparent",
   },
   quantityType: {
     flex: 2,
@@ -71,7 +72,7 @@ const DrinkIngredient = ({
         onClick={() => remove(index)}
         className={classes.button}
       >
-        {"\u2212"}
+        <MdRemoveCircleOutline />
       </Button>
       <label
         htmlFor={`ingredients[${index}].id`}
@@ -176,7 +177,7 @@ const DrinkIngredient = ({
         }}
         className={classes.button}
       >
-        {"\u002B"}
+        <MdAddCircleOutline />
       </Button>
     </div>
   );

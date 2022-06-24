@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import {
   Formik,
@@ -25,13 +24,25 @@ import {
 } from "../../types";
 import Button from "../../components/Button";
 import DrinkIngredient from "./DrinkIngredient";
+import BackButton from "../../components/BackButton";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
 const useStyles = createUseStyles({
+  wrapper: {
+    position: "absolute",
+    backgroundColor: "rgba(13, 0, 0, 0.4)",
+    width: "100%",
+    height: "100%",
+    overflowY: "auto",
+  },
   header: {
     display: "flex",
-    marginTop: 30,
+    fontFamily: "'Reggae One', cursive",
+    color: "#F2E30C",
+    alignItems: "center",
+    paddingTop: 30,
+    marginLeft: "20%",
   },
   backButton: {
     background: "transparent",
@@ -40,9 +51,8 @@ const useStyles = createUseStyles({
   },
   title: {
     position: "relative",
-    left: -20,
     width: "100%",
-    textAlign: "center",
+    marginLeft: "1rem",
   },
   formRoot: {
     display: "flex",
@@ -50,6 +60,13 @@ const useStyles = createUseStyles({
     alignItems: "center",
     width: "60%",
     margin: [0, "auto"],
+    borderRadius: 10,
+    backgroundColor: "rgba(252, 223, 135, 0.9)",
+    color: "#0D0000",
+    boxShadow: ["inset", 0, 0, 15, "#F99938"],
+    fontFamily: "'Catamaran', sans-serif",
+    padding: ["1rem", "2rem", "1rem"],
+    boxSizing: "border-box",
   },
   fieldLabel: {
     fontSize: "1.3rem",
@@ -60,12 +77,31 @@ const useStyles = createUseStyles({
   formField: {
     width: "100%",
     margin: [10, 0, 5],
-    fontSize: "16px",
+    height: "2rem",
+    borderRadius: 10,
+    padding: [2, "1rem"],
+    fontSize: 16,
+    backgroundColor: "rgba(252, 240, 180, 0.8)",
+    color: "#0D0000",
+    border: 0,
+    boxSizing: "border-box",
   },
   errorMessage: {
     alignSelf: "flex-start",
-    color: "red",
+    color: "#d93d1a",
     fontSize: "14px",
+    paddingLeft: "0.5rem",
+  },
+  submitButton: {
+    backgroundColor: "transparent",
+    border: "none",
+    borderRadius: 7,
+    fontSize: 16,
+    margin: [0, 4],
+    padding: ["0.5rem", "1rem"],
+    boxShadow: ["inset", 0, 0, 5, "#F99938"],
+    display: "flex",
+    alignItems: "center",
   },
 });
 
@@ -155,7 +191,6 @@ const CreateDrink = ({
   editId?: number;
   handleBack?: () => void;
 }): JSX.Element => {
-  const navigate = useNavigate();
   const classes = useStyles();
   const [drink, setDrink] = useState<Drink>();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>([]);
@@ -219,14 +254,9 @@ const CreateDrink = ({
   };
 
   return (
-    <div>
+    <div className={classes.wrapper}>
       <header className={classes.header}>
-        <button
-          className={classes.backButton}
-          onClick={() => (editId && handleBack ? handleBack() : navigate(-1))}
-        >
-          {"<< Back"}
-        </button>
+        <BackButton />
         <h1 className={classes.title}>Add a New Drink</h1>
       </header>
       {!loading ? (
@@ -372,7 +402,9 @@ const CreateDrink = ({
                   name="rating"
                 />
               </label>
-              <Button type="submit">Submit</Button>
+              <Button className={classes.submitButton} type="submit">
+                Submit
+              </Button>
             </Form>
           )}
         </Formik>
