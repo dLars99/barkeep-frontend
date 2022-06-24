@@ -12,13 +12,35 @@ const useStyles = createUseStyles({
     margin: [5, 0],
   },
   button: {
-    margin: [3, 6],
+    background: "transparent",
+    border: "none",
+    display: "flex",
+    alignItems: "flex-end",
+    paddingBottom: "0.5rem",
+    fontSize: 20,
+    color: "#616161",
+    cursor: "pointer",
+    "&:hover": {
+      color: "#0D0000",
+    },
   },
   fieldLabel: {
-    fontSize: "16px",
+    fontSize: "1rem",
     display: "flex",
     flexDirection: "column",
     padding: [0, 2],
+  },
+  fieldInput: {
+    width: "100%",
+    margin: [10, 0, 5],
+    height: "2rem",
+    borderRadius: 10,
+    padding: [2, "1rem"],
+    fontSize: 16,
+    backgroundColor: "rgba(252, 240, 180, 0.8)",
+    color: "#0D0000",
+    border: 0,
+    boxSizing: "border-box",
   },
   ingredientSelection: {
     flex: 4,
@@ -80,7 +102,7 @@ const DrinkIngredient = ({
       >
         Name
         <Field
-          className={classes.selectBox}
+          className={`${classes.fieldInput} ${classes.selectBox}`}
           as="select"
           name={`ingredients[${index}].id`}
           label="Ingredient"
@@ -110,7 +132,7 @@ const DrinkIngredient = ({
       >
         Qty
         <Field
-          className={classes.numberBox}
+          className={`${classes.fieldInput} ${classes.numberBox}`}
           type="number"
           name={`ingredients[${index}].qty`}
           min={0}
@@ -122,7 +144,7 @@ const DrinkIngredient = ({
       >
         Pt
         <Field
-          className={classes.selectBox}
+          className={`${classes.fieldInput} ${classes.selectBox}`}
           as="select"
           name={`ingredients[${index}].qtyFraction`}
           label="Fraction"
@@ -144,7 +166,7 @@ const DrinkIngredient = ({
         Unit
         <Field
           as="select"
-          className={classes.selectBox}
+          className={`${classes.fieldInput} ${classes.selectBox}`}
           name={`ingredients[${index}].qtyType`}
         >
           {quantityTypes.map((qtyType: string) => (
@@ -175,7 +197,7 @@ const DrinkIngredient = ({
             qtyType: "",
           });
         }}
-        className={classes.button}
+        className={`${classes.button}`}
       >
         <MdAddCircleOutline />
       </Button>

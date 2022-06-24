@@ -70,7 +70,7 @@ const useStyles = createUseStyles({
   },
   fieldLabel: {
     fontSize: "1.3rem",
-    margin: [0, 0, 25],
+    margin: [0, 0, 15],
     alignSelf: "start",
     width: "100%",
   },
