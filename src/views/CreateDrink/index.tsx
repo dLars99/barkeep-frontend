@@ -25,6 +25,7 @@ import {
 import Button from "../../components/Button";
 import DrinkIngredient from "./DrinkIngredient";
 import BackButton from "../../components/BackButton";
+import { RiCloseLine } from "react-icons/ri";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -49,6 +50,12 @@ const useStyles = createUseStyles({
     border: "none",
     width: 80,
   },
+  cancelButton: {
+    display: "flex",
+    justifyContent: "flex-end",
+    color: "#0D0000",
+    fontSize: 22,
+  },
   title: {
     position: "relative",
     width: "100%",
@@ -66,6 +73,16 @@ const useStyles = createUseStyles({
     boxShadow: ["inset", 0, 0, 15, "#F99938"],
     fontFamily: "'Catamaran', sans-serif",
     padding: ["1rem", "2rem", "1rem"],
+    boxSizing: "border-box",
+  },
+  editFormRoot: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
+    margin: 0,
+    borderRadius: 10,
+    fontFamily: "'Catamaran', sans-serif",
     boxSizing: "border-box",
   },
   fieldLabel: {
@@ -103,6 +120,13 @@ const useStyles = createUseStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    "&:hover": {
+      backgroundColor: "rgba(252, 240, 180, 0.5)",
+    },
+    "&:disabled": {
+      color: "rgba(16, 16, 16, 0.3)",
+      backgroundColor: "rgba(180, 180, 180, 0.1)",
+    },
   },
 });
 
@@ -255,11 +279,17 @@ const CreateDrink = ({
   };
 
   return (
-    <div className={classes.wrapper}>
-      <header className={classes.header}>
-        <BackButton />
-        <h1 className={classes.title}>Add a New Drink</h1>
-      </header>
+    <div className={editId ? "" : classes.wrapper}>
+      {!editId ? (
+        <header className={classes.header}>
+          <BackButton />
+          <h1 className={classes.title}>Add a New Drink</h1>
+        </header>
+      ) : (
+        <div onClick={handleBack} className={classes.cancelButton}>
+          <RiCloseLine />
+        </div>
+      )}
       {!loading ? (
         <Formik
           enableReinitialize
@@ -279,8 +309,15 @@ const CreateDrink = ({
             handleSubmit(editId, values, categoryList, resetForm, handleBack)
           }
         >
-          {({ values, errors }: FormikProps<DrinkFormValues>): JSX.Element => (
-            <Form className={classes.formRoot}>
+          {({
+            values,
+            errors,
+            isValid,
+          }: FormikProps<DrinkFormValues>): JSX.Element => (
+            <Form
+              className={editId ? classes.editFormRoot : classes.formRoot}
+              style={{ width: editId ? "100%" : "60%" }}
+            >
               <label htmlFor="drink_name" className={classes.fieldLabel}>
                 Name
                 <Field
@@ -364,6 +401,7 @@ const CreateDrink = ({
                 Instructions
                 <Field
                   className={classes.formField}
+                  style={{ paddingTop: 6 }}
                   as="textarea"
                   rows={8}
                   name="instructions"
@@ -413,7 +451,11 @@ const CreateDrink = ({
                   min={0}
                 />
               </label>
-              <Button className={classes.submitButton} type="submit">
+              <Button
+                className={classes.submitButton}
+                type="submit"
+                disabled={!isValid}
+              >
                 Submit
               </Button>
             </Form>

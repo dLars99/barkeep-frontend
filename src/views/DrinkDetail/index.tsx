@@ -15,6 +15,7 @@ const useStyles = createUseStyles({
     left: 0,
     backgroundColor: "rgba(141, 137, 128, 0.7)",
     zIndex: 1,
+    overflowY: "auto",
   },
   detailCard: {
     backgroundColor: "rgba(252, 223, 135, 0.9)",
