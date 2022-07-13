@@ -1,8 +1,8 @@
 FROM node:14 AS builder
 WORKDIR /usr/src/app
-ENV NODE_ENV=production
+ARG REACT_APP_API_URL
 COPY . .
-RUN rm -rf node_modules && yarn install --frozen-lockfile
+RUN rm -rf node_modules && yarn install --frozen-lockfile --production
 RUN yarn build
 
 FROM nginx:alpine
