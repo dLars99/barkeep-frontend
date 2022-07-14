@@ -52,14 +52,16 @@ Option 2: Docker. Use the commands below, customizing them for your setup.
 
 ### Screenshots
 
-<img src="./.readme-img/homescreen.png" width=35% height=35%>
 Initial home screen
-<img src="./.readme-img/drink_menu.png" width=35% height=35%>
+<img src="./.readme-img/homescreen.png" width=35% height=35%>
 Drink list
-<img src="./.readme-img/drink_match.png" width=35% height=35%>
+<img src="./.readme-img/drink_menu.png" width=35% height=35%>
 Filter drinks by ingredients
-<img src="./.readme-img/new_drink.png" width=35% height=35%>
+<img src="./.readme-img/drink_match.png" width=35% height=35%>
 Drink creation view
+<img src="./.readme-img/new_drink.png" width=35% height=35%>
+Drink detail view
+<img src="./.readme-img/drink_detail.png" width=35% height=35%>
 
 ### Next steps
 
