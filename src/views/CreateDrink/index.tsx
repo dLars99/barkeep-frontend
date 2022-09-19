@@ -94,7 +94,6 @@ const useStyles = createUseStyles({
   formField: {
     width: "100%",
     margin: [10, 0, 5],
-    height: "2rem",
     borderRadius: 10,
     padding: [2, "1rem"],
     fontSize: 16,
@@ -102,6 +101,9 @@ const useStyles = createUseStyles({
     color: "#0D0000",
     border: 0,
     boxSizing: "border-box",
+  },
+  formLine: {
+    height: "2rem",
   },
   errorMessage: {
     alignSelf: "flex-start",
@@ -321,7 +323,7 @@ const CreateDrink = ({
               <label htmlFor="drink_name" className={classes.fieldLabel}>
                 Name
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   type="text"
                   name="drink_name"
                   label="Name"
@@ -382,7 +384,7 @@ const CreateDrink = ({
               <label htmlFor="category_id" className={classes.fieldLabel}>
                 Category
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   as="select"
                   name="category_id"
                   label="Type"
@@ -412,7 +414,7 @@ const CreateDrink = ({
               <label htmlFor="glass1" className={classes.fieldLabel}>
                 Suggested glass
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   type="text"
                   name="glass1"
                   label="Suggested glass"
@@ -421,7 +423,7 @@ const CreateDrink = ({
               <label htmlFor="glass2" className={classes.fieldLabel}>
                 Second suggested glass
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   type="text"
                   name="glass2"
                 />
@@ -429,7 +431,7 @@ const CreateDrink = ({
               <label htmlFor="video_url" className={classes.fieldLabel}>
                 Link to instructional video
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   type="text"
                   name="video_url"
                 />
@@ -444,7 +446,7 @@ const CreateDrink = ({
               <label htmlFor="rating" className={classes.fieldLabel}>
                 Rating
                 <Field
-                  className={classes.formField}
+                  className={`${classes.formField} ${classes.formLine}`}
                   type="number"
                   name="rating"
                   max={5}
