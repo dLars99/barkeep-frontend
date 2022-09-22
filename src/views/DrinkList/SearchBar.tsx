@@ -33,8 +33,9 @@ const SearchBar = ({
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState<string>();
+
   let queryDebounce: NodeJS.Timeout;
-  const handleChange = (evt: React.FormEvent<HTMLInputElement>) => {
+  const handleChange = (evt: React.FormEvent<HTMLInputElement>): void => {
     clearTimeout(queryDebounce);
     const newQuery = evt.currentTarget.value;
     setQuery(newQuery);
@@ -42,6 +43,7 @@ const SearchBar = ({
       if (!newQuery || newQuery.length > 2) getDrinks(newQuery);
     }, 500);
   };
+
   return (
     <div className={classes.searchBarRoot}>
       <label className={classes.label}>
