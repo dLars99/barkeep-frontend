@@ -1,4 +1,5 @@
 import { FormEvent, useState } from "react";
+import SelectionChip from "./SelectionChip";
 
 type SearchableItem<T> = T & {
   [key: string]: string;
@@ -37,9 +38,11 @@ const SearchableMultiselect = <T,>({
         <input onChange={handleSearch} />
       </div>
       <div>
-        {/* TO DO: Chip component */}
         {selections.map((selection: SearchableItem<T>, index: number) => (
-          <p key={`selection-${index}`}>{selection[displayProperty]}</p>
+          <SelectionChip
+            key={`selection-${index}`}
+            value={selection[displayProperty]}
+          />
         ))}
       </div>
       <div>
