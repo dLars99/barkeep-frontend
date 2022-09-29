@@ -5,6 +5,7 @@ import { BiSearchAlt } from "react-icons/bi";
 import { Ingredient } from "../../types";
 import Checkbox from "../../components/Checkbox";
 import Button from "../../components/Button";
+import SearchableMultiselect from "../../components/SearchableMultiselect";
 
 const API_URL = process.env.REACT_APP_API_URL;
 
@@ -99,7 +100,12 @@ const IngredientSearch = ({
           <h3>Select ingredients from your bar</h3>
           <p>We'll show you drinks you can make</p>
         </div>
-        <div className={classes.ingredientList}>
+        <SearchableMultiselect
+          data={ingredientList}
+          searchableProperty="ingredient_name"
+          displayProperty="ingredient_name"
+        />
+        {/* <div className={classes.ingredientList}>
           {ingredientList.map((ingredient: Ingredient) => (
             <div key={ingredient.id} className={classes.ingredient}>
               <Checkbox
@@ -109,7 +115,7 @@ const IngredientSearch = ({
               />
             </div>
           ))}
-        </div>
+        </div> */}
         <Button
           className={classes.searchButton}
           type="button"
