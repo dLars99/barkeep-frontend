@@ -2,7 +2,7 @@ import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
   chip: {
-    borderRadius: "10% 10% 10% 10% / 50% 50% 50% 50%",
+    borderRadius: "8% 8% 8% 8% / 50% 50% 50% 50%",
     display: "flex",
     padding: [4, 8],
   },

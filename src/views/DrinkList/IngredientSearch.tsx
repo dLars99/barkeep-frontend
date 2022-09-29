@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 import axios, { AxiosError } from "axios";
-import { BiSearchAlt } from "react-icons/bi";
 import { Ingredient } from "../../types";
-import Checkbox from "../../components/Checkbox";
-import Button from "../../components/Button";
 import SearchableMultiselect from "../../components/SearchableMultiselect";
 
 const API_URL = process.env.REACT_APP_API_URL;
@@ -54,14 +51,10 @@ const useStyles = createUseStyles({
 const IngredientSearch = ({
   getDrinks,
 }: {
-  getDrinks: (query?: Record<string, boolean>) => Promise<void>;
+  getDrinks: (query?: string[]) => Promise<void>;
 }): JSX.Element | null => {
   const classes = useStyles();
   const [ingredientList, setIngredientList] = useState<Ingredient[]>();
-  const [selectedIngredients, setSelectedIngredients] = useState<
-    Record<string, boolean>
-  >({});
-  const [changed, setChanged] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -80,18 +73,11 @@ const IngredientSearch = ({
     }
   }, []);
 
-  const handleCheckbox = (e: React.FormEvent<HTMLInputElement>) => {
-    const currentSelections = selectedIngredients;
-    currentSelections[e.currentTarget.id] =
-      !currentSelections[e.currentTarget.id];
-    setSelectedIngredients(currentSelections);
-    setChanged(true);
+  const handleSelectionChange = (selections: Ingredient[]) => {
+    const selectedIds = selections.map((selection: Ingredient) => selection.id);
+    getDrinks(selectedIds);
   };
 
-  const handleSearch = () => {
-    getDrinks(selectedIngredients);
-    setChanged(false);
-  };
   // Search bar
   if (ingredientList?.length)
     return (
@@ -102,29 +88,10 @@ const IngredientSearch = ({
         </div>
         <SearchableMultiselect
           data={ingredientList}
-          searchableProperty="ingredient_name"
           displayProperty="ingredient_name"
+          onChange={handleSelectionChange}
+          searchableProperty="ingredient_name"
         />
-        {/* <div className={classes.ingredientList}>
-          {ingredientList.map((ingredient: Ingredient) => (
-            <div key={ingredient.id} className={classes.ingredient}>
-              <Checkbox
-                id={ingredient.id}
-                onChange={handleCheckbox}
-                label={ingredient.ingredient_name}
-              />
-            </div>
-          ))}
-        </div> */}
-        <Button
-          className={classes.searchButton}
-          type="button"
-          disabled={!changed}
-          onClick={handleSearch}
-        >
-          <BiSearchAlt className={classes.searchIcon} />
-          Search
-        </Button>
       </div>
     );
   return null;

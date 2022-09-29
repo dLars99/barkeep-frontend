@@ -95,7 +95,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   );
 
   const getDrinks = useCallback(
-    async (query?: string | Record<string, boolean>) => {
+    async (query?: string | string[]) => {
       try {
         const params: GetIngredientsParams = {
           limit: LIMIT,
@@ -104,9 +104,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
         if (typeof query === "string") {
           params.query = query && query.length > 2 ? query : "";
         } else if (query) {
-          params.ingredientId = Object.keys(query).filter(
-            (key: string) => query[key]
-          );
+          params.ingredientId = query;
         }
         const drinksFromApi = await axios
           .get(`${API_URL}/drinks`, {

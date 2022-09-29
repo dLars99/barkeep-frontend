@@ -9,10 +9,12 @@ const SearchableMultiselect = <T,>({
   data,
   searchableProperty,
   displayProperty,
+  onChange,
 }: {
   data: SearchableItem<T>[];
   searchableProperty: keyof T;
   displayProperty: keyof T;
+  onChange: (selections: SearchableItem<T>[]) => void;
 }): JSX.Element => {
   // full list, selections, search filter, use results
   const [selections, setSelections] = useState<SearchableItem<T>[]>([]);
@@ -42,8 +44,10 @@ const SearchableMultiselect = <T,>({
     const newSelection = updateFilteredData[newIndex];
     if (newSelection) {
       updateFilteredData.splice(newIndex, 1);
-      setSelections([...selections, newSelection]);
+      const updatedSelections = [...selections, newSelection];
+      setSelections(updatedSelections);
       setFilteredData(updateFilteredData);
+      onChange(updatedSelections);
     }
   };
 
@@ -53,6 +57,7 @@ const SearchableMultiselect = <T,>({
     if (removedItem) {
       setSelections(arrayWithoutItem);
       setFilteredData([...filteredData, removedItem[0]]);
+      onChange(arrayWithoutItem);
     }
   };
 
