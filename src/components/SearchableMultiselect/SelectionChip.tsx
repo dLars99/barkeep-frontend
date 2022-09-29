@@ -15,11 +15,20 @@ const useStyles = createUseStyles({
   },
 });
 
-const SelectionChip = ({ value }: { value: string }): JSX.Element => {
+interface SelectionChipProps {
+  index: number;
+  value: string;
+  handleRemove: (index: number) => void;
+}
+
+const SelectionChip = ({
+  index,
+  value,
+  handleRemove,
+}: SelectionChipProps): JSX.Element => {
   const classes = useStyles();
-  // TO DO: Handle remove
   return (
-    <button className={classes.chip}>
+    <button className={classes.chip} onClick={() => handleRemove(index)}>
       <span className={classes.removeX}>&times;</span>
       <span className={classes.text}>{value}</span>
     </button>

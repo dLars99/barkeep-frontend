@@ -17,23 +17,44 @@ const SearchableMultiselect = <T,>({
   // full list, selections, search filter, use results
   const [selections, setSelections] = useState<SearchableItem<T>[]>([]);
   const [filteredData, setFilteredData] = useState<SearchableItem<T>[]>(data);
+  const [searchTouched, setSearchTouched] = useState<boolean>(false);
 
   const handleSearch = (evt: FormEvent<HTMLInputElement>): void => {
     const query = evt.currentTarget.value.toLowerCase();
-    if (!query) setFilteredData(data);
-    const matches = data.filter((dataItem: SearchableItem<T>) =>
-      dataItem[searchableProperty].toLowerCase().includes(query)
+    let matches = data;
+    if (query) {
+      matches = data.filter((dataItem: SearchableItem<T>) =>
+        dataItem[searchableProperty].toLowerCase().includes(query)
+      );
+    }
+    const unselectedMatches = matches.filter(
+      (dataItem: SearchableItem<T>) =>
+        !selections.some(
+          (selectedItem: SearchableItem<T>) => selectedItem.id === dataItem.id
+        )
     );
-    setFilteredData(matches);
+    setFilteredData(unselectedMatches);
+    if (!searchTouched) setSearchTouched(true);
   };
 
   const handleSelection = (newIndex: number): void => {
-    // TO DO: Avoid double-selection
-    const newSelection = filteredData[newIndex];
-    setSelections([...selections, newSelection]);
+    const updateFilteredData = [...filteredData];
+    const newSelection = updateFilteredData[newIndex];
+    if (newSelection) {
+      updateFilteredData.splice(newIndex, 1);
+      setSelections([...selections, newSelection]);
+      setFilteredData(updateFilteredData);
+    }
   };
 
-  // TO DO: handle remove
+  const removeSelection = (index: number): void => {
+    const arrayWithoutItem = [...selections];
+    const removedItem = arrayWithoutItem.splice(index, 1);
+    if (removedItem) {
+      setSelections(arrayWithoutItem);
+      setFilteredData([...filteredData, removedItem[0]]);
+    }
+  };
 
   return (
     <div>
@@ -43,22 +64,26 @@ const SearchableMultiselect = <T,>({
       <div>
         {selections.map((selection: SearchableItem<T>, index: number) => (
           <SelectionChip
+            handleRemove={removeSelection}
+            index={index}
             key={`selection-${index}`}
             value={selection[displayProperty]}
           />
         ))}
       </div>
-      <div>
-        {filteredData.map((dataItem: SearchableItem<T>, index: number) => (
-          <button
-            key={dataItem.id}
-            type="button"
-            onClick={() => handleSelection(index)}
-          >
-            {dataItem[displayProperty]}
-          </button>
-        ))}
-      </div>
+      {searchTouched ? (
+        <div>
+          {filteredData.map((dataItem: SearchableItem<T>, index: number) => (
+            <button
+              key={dataItem.id}
+              type="button"
+              onClick={() => handleSelection(index)}
+            >
+              {dataItem[displayProperty]}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 };
