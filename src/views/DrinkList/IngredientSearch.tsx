@@ -97,4 +97,4 @@ const IngredientSearch = ({
   return null;
 };
 
-export default React.memo(IngredientSearch);
+export default IngredientSearch;

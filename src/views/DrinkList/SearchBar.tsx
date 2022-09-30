@@ -24,6 +24,8 @@ const useStyles = createUseStyles({
   },
 });
 
+// TO DO: Make reusable for multiple components
+
 const SearchBar = ({
   getDrinks,
 }: {
