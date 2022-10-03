@@ -27,23 +27,28 @@ const useStyles = createUseStyles({
 // TO DO: Make reusable for multiple components
 
 const SearchBar = ({
-  getDrinks,
+  debounce = true,
+  onChange,
 }: {
-  query?: string | undefined;
-  setQuery?: React.Dispatch<React.SetStateAction<string | undefined>>;
-  getDrinks: (query?: string) => Promise<void>;
+  debounce?: boolean;
+  onChange: (query: string) => void;
+  // getDrinks: (query?: string) => Promise<void>;
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState<string>();
 
   let queryDebounce: NodeJS.Timeout;
   const handleChange = (evt: React.FormEvent<HTMLInputElement>): void => {
-    clearTimeout(queryDebounce);
     const newQuery = evt.currentTarget.value;
     setQuery(newQuery);
-    queryDebounce = setTimeout(() => {
-      if (!newQuery || newQuery.length > 2) getDrinks(newQuery);
-    }, 500);
+    if (debounce) {
+      clearTimeout(queryDebounce);
+      queryDebounce = setTimeout(() => {
+        if (!newQuery || newQuery.length > 2) onChange(newQuery);
+      }, 500);
+    } else {
+      onChange(newQuery);
+    }
   };
 
   return (

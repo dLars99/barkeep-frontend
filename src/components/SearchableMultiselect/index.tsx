@@ -1,4 +1,5 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
+import SearchBar from "../../views/DrinkList/SearchBar";
 import SelectionChip from "./SelectionChip";
 
 type SearchableItem<T> = T & {
@@ -21,8 +22,9 @@ const SearchableMultiselect = <T,>({
   const [filteredData, setFilteredData] = useState<SearchableItem<T>[]>(data);
   const [searchTouched, setSearchTouched] = useState<boolean>(false);
 
-  const handleSearch = (evt: FormEvent<HTMLInputElement>): void => {
-    const query = evt.currentTarget.value.toLowerCase();
+  const handleSearch = (rawQuery: string): void => {
+    const query = rawQuery.toLowerCase();
+
     let matches = data;
     if (query) {
       matches = data.filter((dataItem: SearchableItem<T>) =>
@@ -64,7 +66,8 @@ const SearchableMultiselect = <T,>({
   return (
     <div>
       <div>
-        <input onChange={handleSearch} />
+        {/* <input onChange={handleSearch} /> */}
+        <SearchBar debounce={false} onChange={handleSearch} />
       </div>
       <div>
         {selections.map((selection: SearchableItem<T>, index: number) => (

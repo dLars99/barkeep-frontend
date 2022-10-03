@@ -137,7 +137,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
           <IngredientSearch getDrinks={getDrinks} />
         ) : (
           <div className={classes.filters}>
-            <SearchBar getDrinks={getDrinks} />
+            <SearchBar onChange={getDrinks} />
           </div>
         )}
       </header>
