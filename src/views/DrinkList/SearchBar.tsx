@@ -6,25 +6,27 @@ const useStyles = createUseStyles({
     fontFamily: "'Catamaran', sans-serif",
   },
   label: {
-    padding: 8,
-    display: "flex",
     alignContent: "center",
+    display: "flex",
     lineHeight: "1.7rem",
+    padding: 8,
   },
   input: {
-    marginLeft: "1rem",
-    width: "100%",
-    height: "1.5rem",
-    borderRadius: 10,
-    padding: [2, "1rem"],
-    fontSize: 16,
     backgroundColor: "rgba(252, 240, 180, 0.8)",
-    color: "#0D0000",
     border: 0,
+    borderRadius: 10,
+    color: "#0D0000",
+    fontFamily: "'Catamaran', sans-serif",
+    fontSize: 16,
+    height: "1.5rem",
+    marginLeft: "1rem",
+    padding: [2, "1rem"],
+    width: "100%",
+    "&:focus-visible": {
+      outline: "2px solid #fdffe8",
+    },
   },
 });
-
-// TO DO: Make reusable for multiple components
 
 const SearchBar = ({
   debounce = true,
@@ -32,7 +34,6 @@ const SearchBar = ({
 }: {
   debounce?: boolean;
   onChange: (query: string) => void;
-  // getDrinks: (query?: string) => Promise<void>;
 }) => {
   const classes = useStyles();
   const [query, setQuery] = useState<string>();
