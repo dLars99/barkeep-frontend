@@ -12,7 +12,6 @@ const useStyles = createUseStyles({
   searchResult: {
     background: "transparent",
     border: "none",
-    borderRight: "1px solid #0D0000",
     color: "#0D0000",
     cursor: "pointer",
     fontFamily: "'Catamaran', sans-serif",
@@ -21,7 +20,11 @@ const useStyles = createUseStyles({
     padding: "1px 0.75rem",
     width: "max-content",
   },
+  searchResultSeparator: {
+    borderRight: "1px solid #0D0000",
+  },
   selectionHeader: {
+    color: "#0D0000",
     fontFamily: "'Catamaran', sans-serif",
     fontSize: "1rem",
     margin: [0, "0.5rem"],
@@ -29,6 +32,7 @@ const useStyles = createUseStyles({
   selectionRow: {
     alignItems: "center",
     display: "flex",
+    flexFlow: "row wrap",
     marginBottom: "0.5rem",
   },
 });
@@ -56,8 +60,8 @@ const SearchableMultiselect = <T,>({
 
   const handleSearch = (rawQuery: string): void => {
     const query = rawQuery.toLowerCase();
-
     let matches = data;
+
     if (query) {
       matches = data.filter((dataItem: SearchableItem<T>) =>
         dataItem[searchableProperty].toLowerCase().includes(query)
@@ -102,16 +106,24 @@ const SearchableMultiselect = <T,>({
       </div>
       {searchTouched && filteredData.length ? (
         <div className={classes.resultRow}>
-          {filteredData.map((dataItem: SearchableItem<T>, index: number) => (
-            <button
-              className={classes.searchResult}
-              key={dataItem.id}
-              type="button"
-              onClick={() => handleSelection(index)}
-            >
-              {dataItem[displayProperty]}
-            </button>
-          ))}
+          {filteredData.map(
+            (
+              dataItem: SearchableItem<T>,
+              index: number,
+              allData: SearchableItem<T>[]
+            ) => (
+              <button
+                className={`${classes.searchResult} ${
+                  index !== allData.length - 1 && classes.searchResultSeparator
+                }`}
+                key={dataItem.id}
+                type="button"
+                onClick={() => handleSelection(index)}
+              >
+                {dataItem[displayProperty]}
+              </button>
+            )
+          )}
         </div>
       ) : null}
       {selections.length ? (
