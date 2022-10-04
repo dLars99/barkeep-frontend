@@ -73,7 +73,9 @@ const SearchableMultiselect = <T,>({
           (selectedItem: SearchableItem<T>) => selectedItem.id === dataItem.id
         )
     );
-    setFilteredData(unselectedMatches);
+    // Impose maximum matches
+    const limitedMatches = unselectedMatches.slice(0, 20);
+    setFilteredData(limitedMatches);
     if (!searchTouched) setSearchTouched(true);
   };
 
