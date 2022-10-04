@@ -1,10 +1,21 @@
 import { createUseStyles } from "react-jss";
+import Button from "../Button";
 
 const useStyles = createUseStyles({
   chip: {
     borderRadius: "8% 8% 8% 8% / 50% 50% 50% 50%",
     display: "flex",
-    padding: [4, 8],
+    backgroundColor: "transparent",
+    border: "none",
+    fontSize: "1rem",
+    margin: [0, 4],
+    padding: ["0.5rem", "1rem"],
+    boxShadow: ["inset", 0, 0, 5, "#F99938"],
+    alignItems: "center",
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "rgba(252, 240, 180, 0.5)",
+    },
   },
   removeX: {
     width: 20,
@@ -28,10 +39,10 @@ const SelectionChip = ({
 }: SelectionChipProps): JSX.Element => {
   const classes = useStyles();
   return (
-    <button className={classes.chip} onClick={() => handleRemove(index)}>
+    <Button className={classes.chip} onClick={() => handleRemove(index)}>
       <span className={classes.removeX}>&times;</span>
       <span className={classes.text}>{value}</span>
-    </button>
+    </Button>
   );
 };
 

@@ -1,6 +1,37 @@
 import { useState } from "react";
+import { createUseStyles } from "react-jss";
 import SearchBar from "../../views/DrinkList/SearchBar";
 import SelectionChip from "./SelectionChip";
+
+const useStyles = createUseStyles({
+  resultRow: {
+    display: "flex",
+    flexFlow: "row wrap",
+    margin: ["0.5rem", 0, "1rem", "4rem"],
+  },
+  searchResult: {
+    background: "transparent",
+    border: "none",
+    borderRight: "1px solid #0D0000",
+    color: "#0D0000",
+    cursor: "pointer",
+    fontFamily: "'Catamaran', sans-serif",
+    fontSize: "1rem",
+    margin: [".25rem", 0],
+    padding: "1px 0.75rem",
+    width: "max-content",
+  },
+  selectionHeader: {
+    fontFamily: "'Catamaran', sans-serif",
+    fontSize: "1rem",
+    margin: [0, "0.5rem"],
+  },
+  selectionRow: {
+    alignItems: "center",
+    display: "flex",
+    marginBottom: "0.5rem",
+  },
+});
 
 type SearchableItem<T> = T & {
   [P in keyof T]: string;
@@ -17,7 +48,8 @@ const SearchableMultiselect = <T,>({
   displayProperty: keyof T;
   onChange: (selections: SearchableItem<T>[]) => void;
 }): JSX.Element => {
-  // full list, selections, search filter, use results
+  const classes = useStyles();
+
   const [selections, setSelections] = useState<SearchableItem<T>[]>([]);
   const [filteredData, setFilteredData] = useState<SearchableItem<T>[]>(data);
   const [searchTouched, setSearchTouched] = useState<boolean>(false);
@@ -66,29 +98,32 @@ const SearchableMultiselect = <T,>({
   return (
     <div>
       <div>
-        {/* <input onChange={handleSearch} /> */}
         <SearchBar debounce={false} onChange={handleSearch} />
       </div>
-      <div>
-        {selections.map((selection: SearchableItem<T>, index: number) => (
-          <SelectionChip
-            handleRemove={removeSelection}
-            index={index}
-            key={`selection-${index}`}
-            value={selection[displayProperty]}
-          />
-        ))}
-      </div>
-      {searchTouched ? (
-        <div>
+      {searchTouched && filteredData.length ? (
+        <div className={classes.resultRow}>
           {filteredData.map((dataItem: SearchableItem<T>, index: number) => (
             <button
+              className={classes.searchResult}
               key={dataItem.id}
               type="button"
               onClick={() => handleSelection(index)}
             >
               {dataItem[displayProperty]}
             </button>
+          ))}
+        </div>
+      ) : null}
+      {selections.length ? (
+        <div className={classes.selectionRow}>
+          <h4 className={classes.selectionHeader}>Selected Ingredients:</h4>
+          {selections.map((selection: SearchableItem<T>, index: number) => (
+            <SelectionChip
+              handleRemove={removeSelection}
+              index={index}
+              key={`selection-${index}`}
+              value={selection[displayProperty]}
+            />
           ))}
         </div>
       ) : null}
