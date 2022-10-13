@@ -38,7 +38,7 @@ const useStyles = createUseStyles({
 });
 
 type SearchableItem<T> = T & {
-  [P in keyof T]: string;
+  [key in keyof T]: string;
 } & { id: string | number };
 
 const SearchableMultiselect = <T,>({
