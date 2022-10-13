@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
-import axios, { AxiosError } from "axios";
 import { Ingredient } from "../../types";
 import SearchableMultiselect from "../../components/SearchableMultiselect";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import { useIngredients } from "../../api/ingredients";
 
 const useStyles = createUseStyles({
   ingredientSelection: {
@@ -54,24 +51,7 @@ const IngredientSearch = ({
   getDrinks: (query?: string[]) => Promise<void>;
 }): JSX.Element | null => {
   const classes = useStyles();
-  const [ingredientList, setIngredientList] = useState<Ingredient[]>();
-
-  useEffect(() => {
-    try {
-      (async () => {
-        const ingredients = await axios
-          .get<Ingredient[]>(`${API_URL}/ingredients`)
-          .catch((err: AxiosError) => {
-            throw err;
-          });
-        if (!ingredients)
-          throw new Error("Could not retrieve ingredients from API!");
-        setIngredientList(ingredients.data || []);
-      })();
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
+  const { data, isFetching } = useIngredients();
 
   const handleSelectionChange = (selections: Ingredient[]) => {
     const selectedIds = selections.map((selection: Ingredient) => selection.id);
@@ -79,7 +59,7 @@ const IngredientSearch = ({
   };
 
   // Search bar
-  if (ingredientList?.length)
+  if (!isFetching && data?.length)
     return (
       <div className={classes.ingredientSelection}>
         <div className={classes.title}>
@@ -87,7 +67,7 @@ const IngredientSearch = ({
           <p>We'll show you drinks you can make</p>
         </div>
         <SearchableMultiselect
-          data={ingredientList}
+          data={data}
           displayProperty="ingredient_name"
           onChange={handleSelectionChange}
           searchableProperty="ingredient_name"

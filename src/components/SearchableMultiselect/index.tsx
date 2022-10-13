@@ -41,17 +41,19 @@ type SearchableItem<T> = T & {
   [key in keyof T]: string;
 } & { id: string | number };
 
+interface SearchableMultiselectProps<T> {
+  data: SearchableItem<T>[];
+  searchableProperty: keyof T;
+  displayProperty: keyof T;
+  onChange: (selections: SearchableItem<T>[]) => void;
+}
+
 const SearchableMultiselect = <T,>({
   data,
   searchableProperty,
   displayProperty,
   onChange,
-}: {
-  data: SearchableItem<T>[];
-  searchableProperty: keyof T;
-  displayProperty: keyof T;
-  onChange: (selections: SearchableItem<T>[]) => void;
-}): JSX.Element => {
+}: SearchableMultiselectProps<T>): JSX.Element => {
   const classes = useStyles();
 
   const [selections, setSelections] = useState<SearchableItem<T>[]>([]);
