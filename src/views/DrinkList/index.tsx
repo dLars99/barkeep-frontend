@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect, useMemo } from "react";
-import axios, { AxiosError } from "axios";
-import { Drink, GetIngredientsParams } from "../../types";
+import { useState, useMemo, useCallback } from "react";
+import { useDrinks } from "../../api/drinks";
+import { Drink } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
 import Button from "../../components/Button";
@@ -81,52 +81,28 @@ const useStyles = createUseStyles({
 });
 
 const LIMIT = 10;
-const API_URL = process.env.REACT_APP_API_URL;
 
 const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
-  const [drinks, setDrinks] = useState<Drink[]>([]);
-  const [page, setPage] = useState<number>(1);
+  const [query, setQuery] = useState<string | string[]>("");
+  const [page, setPage] = useState<number>(0);
+  const { data: drinks } = useDrinks(query, page);
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
 
-  const totalPages = useMemo<number>(
-    () => Math.ceil(drinks.length / LIMIT),
-    [drinks.length]
-  );
+  const totalPages = useMemo<number>(() => {
+    if (drinks?.length) {
+      return Math.ceil(drinks.length / LIMIT);
+    } else {
+      return 1;
+    }
+  }, [drinks?.length]);
 
-  const getDrinks = useCallback(
-    async (query?: string | Record<string, boolean>) => {
-      try {
-        const params: GetIngredientsParams = {
-          limit: LIMIT,
-          offset: page * LIMIT,
-        };
-        if (typeof query === "string") {
-          params.query = query && query.length > 2 ? query : "";
-        } else if (query) {
-          params.ingredientId = Object.keys(query).filter(
-            (key: string) => query[key]
-          );
-        }
-        const drinksFromApi = await axios
-          .get(`${API_URL}/drinks`, {
-            params,
-          })
-          .catch((err: AxiosError) => {
-            console.error(err);
-          });
-        if (!drinksFromApi) throw new Error("Could not retrieve drinks");
-        setDrinks(drinksFromApi.data || []);
-      } catch (err) {
-        console.error(err);
-      }
+  const updateQuery = useCallback(
+    (updatedQuery: string | string[]) => {
+      setQuery(updatedQuery);
     },
-    [page]
+    [setQuery]
   );
-
-  useEffect(() => {
-    if (!selectedDrink) getDrinks();
-  }, [getDrinks, selectedDrink]);
 
   return (
     <div>
@@ -136,23 +112,25 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
           <h1 className={classes.title}>Find a Drink</h1>
         </div>
         {byIngredients ? (
-          <IngredientSearch getDrinks={getDrinks} />
+          <IngredientSearch onChange={updateQuery} />
         ) : (
           <div className={classes.filters}>
-            <SearchBar getDrinks={getDrinks} />
+            <SearchBar onChange={updateQuery} />
           </div>
         )}
       </header>
       <section className={classes.drinkList}>
-        {drinks.map((drink) => (
-          <div
-            key={drink.id}
-            className={classes.drinkCard}
-            onClick={() => setSelectedDrink(drink)}
-          >
-            <DrinkCard key={drink.id} drink={drink} />
-          </div>
-        ))}
+        {drinks
+          ? drinks.map((drink: Drink) => (
+              <div
+                key={drink.id}
+                className={classes.drinkCard}
+                onClick={() => setSelectedDrink(drink)}
+              >
+                <DrinkCard key={drink.id} drink={drink} />
+              </div>
+            ))
+          : null}
       </section>
       <footer className={classes.paginator}>
         {totalPages > 1 ? (

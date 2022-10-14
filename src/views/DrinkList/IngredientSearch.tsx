@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
-import axios, { AxiosError } from "axios";
-import { BiSearchAlt } from "react-icons/bi";
 import { Ingredient } from "../../types";
-import Checkbox from "../../components/Checkbox";
-import Button from "../../components/Button";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import SearchableMultiselect from "../../components/SearchableMultiselect";
+import { useIngredients } from "../../api/ingredients";
 
 const useStyles = createUseStyles({
   ingredientSelection: {
@@ -51,77 +46,35 @@ const useStyles = createUseStyles({
 });
 
 const IngredientSearch = ({
-  getDrinks,
+  onChange,
 }: {
-  getDrinks: (query?: Record<string, boolean>) => Promise<void>;
+  onChange: (query: string[]) => void;
 }): JSX.Element | null => {
   const classes = useStyles();
-  const [ingredientList, setIngredientList] = useState<Ingredient[]>();
-  const [selectedIngredients, setSelectedIngredients] = useState<
-    Record<string, boolean>
-  >({});
-  const [changed, setChanged] = useState<boolean>(false);
+  const { data, isFetching } = useIngredients();
 
-  useEffect(() => {
-    try {
-      (async () => {
-        const ingredients = await axios
-          .get<Ingredient[]>(`${API_URL}/ingredients`)
-          .catch((err: AxiosError) => {
-            throw err;
-          });
-        if (!ingredients)
-          throw new Error("Could not retrieve ingredients from API!");
-        setIngredientList(ingredients.data || []);
-      })();
-    } catch (err) {
-      console.error(err);
-    }
-  }, []);
-
-  const handleCheckbox = (e: React.FormEvent<HTMLInputElement>) => {
-    const currentSelections = selectedIngredients;
-    currentSelections[e.currentTarget.id] =
-      !currentSelections[e.currentTarget.id];
-    setSelectedIngredients(currentSelections);
-    setChanged(true);
+  const handleSelectionChange = (selections: Ingredient[]) => {
+    const selectedIds = selections.map((selection: Ingredient) => selection.id);
+    onChange(selectedIds);
   };
 
-  const handleSearch = () => {
-    getDrinks(selectedIngredients);
-    setChanged(false);
-  };
   // Search bar
-  if (ingredientList?.length)
+  if (!isFetching && data?.length)
     return (
       <div className={classes.ingredientSelection}>
         <div className={classes.title}>
           <h3>Select ingredients from your bar</h3>
           <p>We'll show you drinks you can make</p>
         </div>
-        <div className={classes.ingredientList}>
-          {ingredientList.map((ingredient: Ingredient) => (
-            <div key={ingredient.id} className={classes.ingredient}>
-              <Checkbox
-                id={ingredient.id}
-                onChange={handleCheckbox}
-                label={ingredient.ingredient_name}
-              />
-            </div>
-          ))}
-        </div>
-        <Button
-          className={classes.searchButton}
-          type="button"
-          disabled={!changed}
-          onClick={handleSearch}
-        >
-          <BiSearchAlt className={classes.searchIcon} />
-          Search
-        </Button>
+        <SearchableMultiselect
+          data={data}
+          displayProperty="ingredient_name"
+          onChange={handleSelectionChange}
+          searchableProperty="ingredient_name"
+        />
       </div>
     );
   return null;
 };
 
-export default React.memo(IngredientSearch);
+export default IngredientSearch;
