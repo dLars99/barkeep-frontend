@@ -46,16 +46,16 @@ const useStyles = createUseStyles({
 });
 
 const IngredientSearch = ({
-  getDrinks,
+  onChange,
 }: {
-  getDrinks: (query?: string[]) => Promise<void>;
+  onChange: (query: string[]) => void;
 }): JSX.Element | null => {
   const classes = useStyles();
   const { data, isFetching } = useIngredients();
 
   const handleSelectionChange = (selections: Ingredient[]) => {
     const selectedIds = selections.map((selection: Ingredient) => selection.id);
-    getDrinks(selectedIds);
+    onChange(selectedIds);
   };
 
   // Search bar

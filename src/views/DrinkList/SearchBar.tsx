@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
 
 const useStyles = createUseStyles({
@@ -36,21 +36,23 @@ const SearchBar = ({
   onChange: (query: string) => void;
 }) => {
   const classes = useStyles();
-  const [query, setQuery] = useState<string>();
+  const [query, setQuery] = useState<string>("");
 
-  let queryDebounce: NodeJS.Timeout;
   const handleChange = (evt: React.FormEvent<HTMLInputElement>): void => {
-    const newQuery = evt.currentTarget.value;
-    setQuery(newQuery);
-    if (debounce) {
-      clearTimeout(queryDebounce);
-      queryDebounce = setTimeout(() => {
-        if (!newQuery || newQuery.length > 2) onChange(newQuery);
-      }, 500);
-    } else {
-      onChange(newQuery);
-    }
+    setQuery(evt.currentTarget.value);
+    if (!debounce) onChange(query);
   };
+
+  // Debounce query changes
+  useEffect(() => {
+    if (debounce) {
+      const queryDebounce = setTimeout(() => {
+        if (!query || query.length > 2) onChange(query || "");
+      }, 500);
+
+      return () => clearTimeout(queryDebounce);
+    }
+  }, [debounce, query, onChange]);
 
   return (
     <div className={classes.searchBarRoot}>

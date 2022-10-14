@@ -16,13 +16,6 @@ export interface IngredientFormValues {
   suggestions: string;
 }
 
-export interface GetIngredientsParams {
-  limit: number;
-  offset: number;
-  query?: string;
-  ingredientId?: string[];
-}
-
 export interface DrinkCategory {
   id: string;
   category_name: string;
