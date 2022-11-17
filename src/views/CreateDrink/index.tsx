@@ -22,7 +22,7 @@ import {
   StructuredDrinkIngredient,
   Drink,
 } from "../../types";
-import Button from "../../components/Button";
+import { Button } from "../../components/Buttons";
 import DrinkIngredient from "./DrinkIngredient";
 import BackButton from "../../components/BackButton";
 import { RiCloseLine } from "react-icons/ri";

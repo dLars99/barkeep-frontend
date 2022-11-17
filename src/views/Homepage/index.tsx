@@ -1,5 +1,5 @@
 import { createUseStyles } from "react-jss";
-import Button from "../../components/Button";
+import { Button } from "../../components/Buttons";
 
 const useStyles = createUseStyles({
   root: {

@@ -1,15 +1,20 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDrinks } from "../../api/drinks";
 import { Drink } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
-import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
 import IngredientSearch from "./IngredientSearch";
 import BackButton from "../../components/BackButton";
+import { MinusButton, PlusButton } from "../../components/Buttons";
 
 const useStyles = createUseStyles({
+  drinkListPage: {
+    position: "relative",
+    minHeight: "calc(100vh - 30px)",
+    paddingBottom: 40,
+  },
   header: {
     display: "flex",
     flexDirection: "column",
@@ -61,6 +66,9 @@ const useStyles = createUseStyles({
     },
   },
   paginator: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
     display: "flex",
     justifyContent: "flex-end",
     padding: [0, 8, 4, 0],
@@ -72,6 +80,15 @@ const useStyles = createUseStyles({
   },
   pageButton: {
     margin: [0, 4],
+    alignItems: "center",
+    paddingBottom: 0,
+    color: "#F2E30C",
+    "&:disabled": {
+      color: "#616161",
+    },
+    "&:hover": {
+      color: "#F2E30CAA",
+    },
   },
   pageDisplay: {
     padding: 6,
@@ -85,17 +102,28 @@ const LIMIT = 10;
 const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
   const [query, setQuery] = useState<string | string[]>("");
-  const [page, setPage] = useState<number>(0);
-  const { data: drinks } = useDrinks(query, page);
+  const [page, setPage] = useState<number>(1);
+  const { data } = useDrinks(query, page);
+  const drinks = data?.data;
+  const count = data?.count;
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
 
   const totalPages = useMemo<number>(() => {
-    if (drinks?.length) {
-      return Math.ceil(drinks.length / LIMIT);
+    if (count) {
+      return Math.ceil(count / LIMIT);
     } else {
       return 1;
     }
-  }, [drinks?.length]);
+  }, [count]);
+
+  // If a query change changes the number of pages, make sure we're not past the last page
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const updateQuery = useCallback(
     (updatedQuery: string | string[]) => {
@@ -105,7 +133,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   );
 
   return (
-    <div>
+    <div className={classes.drinkListPage}>
       <header className={classes.header}>
         <div className={classes.titleLine}>
           <BackButton />
@@ -134,25 +162,23 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
       </section>
       <footer className={classes.paginator}>
         {totalPages > 1 ? (
-          <Button
+          <MinusButton
             disabled={page === 1}
             className={classes.pageButton}
             onClick={() => setPage(page - 1)}
-          >
-            &minus;
-          </Button>
+          />
         ) : null}
         <div
           className={classes.pageDisplay}
         >{`Page ${page} of ${totalPages}`}</div>
         {totalPages > 1 ? (
-          <Button
+          <PlusButton
             disabled={page === totalPages}
             className={classes.pageButton}
-            onClick={() => setPage(page + 1)}
-          >
-            {"\u002B"}
-          </Button>
+            onClick={() => {
+              handlePageChange(page + 1);
+            }}
+          />
         ) : null}
       </footer>
       {selectedDrink ? (

@@ -10,7 +10,7 @@ import {
 } from "formik";
 import { createUseStyles } from "react-jss";
 import { IngredientType, IngredientFormValues } from "../../types";
-import Button from "../../components/Button";
+import { Button } from "../../components/Buttons";
 import BackButton from "../../components/BackButton";
 
 const API_URL = process.env.REACT_APP_API_URL;
