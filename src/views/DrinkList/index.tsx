@@ -8,6 +8,7 @@ import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
 import IngredientSearch from "./IngredientSearch";
 import BackButton from "../../components/BackButton";
+import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 
 const useStyles = createUseStyles({
   header: {
@@ -61,6 +62,9 @@ const useStyles = createUseStyles({
     },
   },
   paginator: {
+    position: "absolute",
+    bottom: 10,
+    right: 10,
     display: "flex",
     justifyContent: "flex-end",
     padding: [0, 8, 4, 0],
@@ -85,17 +89,19 @@ const LIMIT = 10;
 const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   const classes = useStyles();
   const [query, setQuery] = useState<string | string[]>("");
-  const [page, setPage] = useState<number>(0);
-  const { data: drinks } = useDrinks(query, page);
+  const [page, setPage] = useState<number>(1);
+  const { data } = useDrinks(query, page);
+  const drinks = data?.data;
+  const count = data?.count;
   const [selectedDrink, setSelectedDrink] = useState<Drink>();
 
   const totalPages = useMemo<number>(() => {
-    if (drinks?.length) {
-      return Math.ceil(drinks.length / LIMIT);
+    if (count) {
+      return Math.ceil(count / LIMIT);
     } else {
       return 1;
     }
-  }, [drinks?.length]);
+  }, [count]);
 
   const updateQuery = useCallback(
     (updatedQuery: string | string[]) => {
@@ -139,7 +145,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
             className={classes.pageButton}
             onClick={() => setPage(page - 1)}
           >
-            &minus;
+            <MdRemoveCircleOutline />
           </Button>
         ) : null}
         <div
@@ -151,7 +157,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
             className={classes.pageButton}
             onClick={() => setPage(page + 1)}
           >
-            {"\u002B"}
+            <MdAddCircleOutline />
           </Button>
         ) : null}
       </footer>
