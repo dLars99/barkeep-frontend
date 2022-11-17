@@ -43,10 +43,6 @@ export interface DrinkFormValues {
 export interface DrinkFormResetValues extends DrinkFormValues {
   ingredients: never[];
 }
-export interface QuantityFraction {
-  display: string;
-  value: number;
-}
 
 export interface StructuredDrinkIngredient {
   id: number;

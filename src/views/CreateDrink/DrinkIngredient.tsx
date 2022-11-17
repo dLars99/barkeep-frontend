@@ -1,7 +1,8 @@
 import { Field, FieldArrayRenderProps } from "formik";
 import { createUseStyles } from "react-jss";
 import { MinusButton, PlusButton } from "../../components/Buttons";
-import { Ingredient, QuantityFraction } from "../../types";
+import { Ingredient } from "../../types";
+import { QuantityFraction } from "../../helpers/lists";
 import { fractions, quantityTypes } from "../../helpers/lists";
 
 const useStyles = createUseStyles({

@@ -24,7 +24,9 @@ const IngredientList = ({
   };
 
   const plural = (measurement: string): string => {
-    return measurement === "dash" ? "dashes" : measurement + "s";
+    if (!measurement) return "";
+    if (measurement === "dash") return "dashes";
+    return measurement + "s";
   };
 
   return (
