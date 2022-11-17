@@ -1,4 +1,7 @@
-import { QuantityFraction } from "../types";
+export interface QuantityFraction {
+  display: string;
+  value: number;
+}
 
 export const fractions: QuantityFraction[] = [
   { display: "", value: 0 },
