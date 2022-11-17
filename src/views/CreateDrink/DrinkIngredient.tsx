@@ -1,9 +1,8 @@
 import { Field, FieldArrayRenderProps } from "formik";
 import { createUseStyles } from "react-jss";
-import Button from "../../components/Button";
+import { MinusButton, PlusButton } from "../../components/Buttons";
 import { Ingredient, QuantityFraction } from "../../types";
 import { fractions, quantityTypes } from "../../helpers/lists";
-import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
 
 const useStyles = createUseStyles({
   formField: {
@@ -87,15 +86,25 @@ const DrinkIngredient = ({
   const { remove, insert, form } = renderProps;
   const { values } = form;
 
+  const handleAddIngredient = () => {
+    insert(index + 1, {
+      // Push next available ingredient id as default value
+      id:
+        ingredientList?.find((ingredient) =>
+          values.ingredients.some(
+            (selectedIngredients: Ingredient) =>
+              selectedIngredients.id !== ingredient.id
+          )
+        )?.id ?? "",
+      qty: 0,
+      qtyFraction: "",
+      qtyType: "",
+    });
+  };
+
   return (
     <div className={classes.formField}>
-      <Button
-        type="button"
-        onClick={() => remove(index)}
-        className={classes.button}
-      >
-        <MdRemoveCircleOutline />
-      </Button>
+      <MinusButton onClick={() => remove(index)} />
       <label
         htmlFor={`ingredients[${index}].id`}
         className={classes.ingredientSelection}
@@ -180,27 +189,7 @@ const DrinkIngredient = ({
           ))}
         </Field>
       </label>
-      <Button
-        type="button"
-        onClick={() => {
-          insert(index + 1, {
-            // Push next available ingredient id
-            id:
-              ingredientList?.find((ingredient) =>
-                values.ingredients.some(
-                  (selectedIngredients: Ingredient) =>
-                    selectedIngredients.id !== ingredient.id
-                )
-              )?.id ?? "",
-            qty: 0,
-            qtyFraction: "",
-            qtyType: "",
-          });
-        }}
-        className={classes.button}
-      >
-        <MdAddCircleOutline />
-      </Button>
+      <PlusButton onClick={handleAddIngredient} />
     </div>
   );
 };

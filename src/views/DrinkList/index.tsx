@@ -1,16 +1,20 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDrinks } from "../../api/drinks";
 import { Drink } from "../../types";
 import { createUseStyles } from "react-jss";
 import DrinkCard from "./DrinkCard";
-import Button from "../../components/Button";
 import DrinkDetail from "../DrinkDetail";
 import SearchBar from "./SearchBar";
 import IngredientSearch from "./IngredientSearch";
 import BackButton from "../../components/BackButton";
-import { MdAddCircleOutline, MdRemoveCircleOutline } from "react-icons/md";
+import { MinusButton, PlusButton } from "../../components/Buttons";
 
 const useStyles = createUseStyles({
+  drinkListPage: {
+    position: "relative",
+    minHeight: "calc(100vh - 30px)",
+    paddingBottom: 40,
+  },
   header: {
     display: "flex",
     flexDirection: "column",
@@ -76,6 +80,15 @@ const useStyles = createUseStyles({
   },
   pageButton: {
     margin: [0, 4],
+    alignItems: "center",
+    paddingBottom: 0,
+    color: "#F2E30C",
+    "&:disabled": {
+      color: "#616161",
+    },
+    "&:hover": {
+      color: "#F2E30CAA",
+    },
   },
   pageDisplay: {
     padding: 6,
@@ -103,6 +116,15 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
     }
   }, [count]);
 
+  // If a query change changes the number of pages, make sure we're not past the last page
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
+
   const updateQuery = useCallback(
     (updatedQuery: string | string[]) => {
       setQuery(updatedQuery);
@@ -111,7 +133,7 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
   );
 
   return (
-    <div>
+    <div className={classes.drinkListPage}>
       <header className={classes.header}>
         <div className={classes.titleLine}>
           <BackButton />
@@ -140,25 +162,23 @@ const DrinkList = ({ byIngredients = false }: { byIngredients?: boolean }) => {
       </section>
       <footer className={classes.paginator}>
         {totalPages > 1 ? (
-          <Button
+          <MinusButton
             disabled={page === 1}
             className={classes.pageButton}
             onClick={() => setPage(page - 1)}
-          >
-            <MdRemoveCircleOutline />
-          </Button>
+          />
         ) : null}
         <div
           className={classes.pageDisplay}
         >{`Page ${page} of ${totalPages}`}</div>
         {totalPages > 1 ? (
-          <Button
+          <PlusButton
             disabled={page === totalPages}
             className={classes.pageButton}
-            onClick={() => setPage(page + 1)}
-          >
-            <MdAddCircleOutline />
-          </Button>
+            onClick={() => {
+              handlePageChange(page + 1);
+            }}
+          />
         ) : null}
       </footer>
       {selectedDrink ? (

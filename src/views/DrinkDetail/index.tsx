@@ -1,7 +1,7 @@
 import { SyntheticEvent, useState } from "react";
 import { createUseStyles } from "react-jss";
 import CreateDrink from "../CreateDrink";
-import Button from "../../components/Button";
+import { Button } from "../../components/Buttons";
 import { Drink } from "../../types";
 import IngredientList from "../DrinkList/IngredientList";
 import { RiEdit2Line, RiCloseLine } from "react-icons/ri";

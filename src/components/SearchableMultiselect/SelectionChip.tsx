@@ -1,5 +1,5 @@
 import { createUseStyles } from "react-jss";
-import Button from "../Button";
+import { Button } from "../Buttons";
 
 const useStyles = createUseStyles({
   chip: {
